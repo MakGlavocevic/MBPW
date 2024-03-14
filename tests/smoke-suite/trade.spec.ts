@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pom/login.page';
+import { HomePage } from '../../pom/home.page';
+import { TradePage } from '../../pom/trade.page';
 import { testConfig } from '../../testConfig';
 
 test.beforeEach(async ({ page }) => {
@@ -14,16 +16,26 @@ test.beforeEach(async ({ page }) => {
   await loginPage.userIsSignedIn();
 });
 
-test('User successfully opens BUY market default position', async ({ page }) => {
+test('User successfully opens and closes a hedging BUY position', async ({ page }) => {
 
-  
+    const homePage = new HomePage(page);
+    await homePage.selectHedgingTradeAccount();
 
+    const tradePage = new TradePage(page);
+    await tradePage.navigateToTradePage();
+    await tradePage.closeAllPositions();
+    await tradePage.openEURUSDPosition('BUY');
+    await tradePage.closePosition();
 });
 
-test('User successfully opens SELL market default position', async ({ page }) => {
+test('User successfully opens and closes a hedging SELL position', async ({ page }) => {
 
-  
+    const homePage = new HomePage(page);
+    await homePage.selectHedgingTradeAccount();
 
+    const tradePage = new TradePage(page);
+    await tradePage.navigateToTradePage();
+    await tradePage.closeAllPositions();
+    await tradePage.openEURUSDPosition('SELL');
+    await tradePage.closePosition();
 });
-
-
