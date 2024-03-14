@@ -17,6 +17,9 @@ export class LoginPage {
     readonly OTP_5: Locator;
     readonly OTP_6: Locator;
     readonly WALLET_BACKGROUND: Locator;
+    readonly INVALID_EMAIL_OR_PASSWORD_ERROR: Locator;
+    readonly INVALID_EMAIL_OR_PASSWORD_TEXT: string;
+   
 
     constructor(page: Page) {
         this.page = page;
@@ -34,7 +37,8 @@ export class LoginPage {
         this.OTP_5 = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/input[1]');
         this.OTP_6 = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[6]/input[1]');
         this.WALLET_BACKGROUND = page.locator('[alt="wallet-background"]');
-        
+        this.INVALID_EMAIL_OR_PASSWORD_ERROR = page.locator('[class="style_message__PKH_2 style_error__fKZrk"]');
+        this.INVALID_EMAIL_OR_PASSWORD_TEXT = 'Invalid email or password. Please try again.';
     }
 
     async navigateToLoginPage(): Promise<void> {
@@ -65,6 +69,24 @@ export class LoginPage {
 
         await expect(this.LOGIN_SUBMIT_BUTTON).toBeVisible();
         await this.LOGIN_SUBMIT_BUTTON.click();
+    }
+
+    async loginWithInvalidCredentials(): Promise<void> {
+      
+        await expect(this.USERNAME_EDITBOX).toBeVisible();
+        await expect(this.PASSWORD_EDITBOX).toBeVisible();
+        
+        await this.USERNAME_EDITBOX.fill('username@dot.com');
+        await this.PASSWORD_EDITBOX.fill('password');
+
+        await expect(this.LOGIN_SUBMIT_BUTTON).toBeVisible();
+        await this.LOGIN_SUBMIT_BUTTON.click();
+    }
+
+    async assertInvalidCredentialsError(): Promise<void> {
+      
+        await expect(this.INVALID_EMAIL_OR_PASSWORD_ERROR).toBeVisible();
+        await expect(this.INVALID_EMAIL_OR_PASSWORD_ERROR).toHaveText(this.INVALID_EMAIL_OR_PASSWORD_TEXT);
     }
 
     async wait15SecondsForUserToFinishCaptcha(): Promise<void> {
