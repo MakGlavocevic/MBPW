@@ -43,11 +43,6 @@ export class LoginPage {
 
     async navigateToLoginPage(): Promise<void> {
 
-        await this.page.goto("");
-        await this.page.setViewportSize({
-            width: 1920,
-            height: 1080,
-          });
         await expect(this.REDIRECT_TO_LOGIN_BUTTON).toBeVisible();
         await this.REDIRECT_TO_LOGIN_BUTTON.click();
 
