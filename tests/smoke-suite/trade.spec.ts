@@ -31,7 +31,7 @@ test('User successfully opens and closes a hedging BUY position', async ({ page 
     await tradePage.assertCurrentPrice('BUY');
     await tradePage.assertMargin();
     await tradePage.assertThereIsNoCommisionAndSwap();
-    await tradePage.assertThereIsTPSL();
+    await tradePage.assertThereIsNoTPSL();
 
     await tradePage.closePosition();
 });
@@ -51,7 +51,7 @@ test('User successfully opens and closes a hedging SELL position', async ({ page
     await tradePage.assertCurrentPrice('SELL');
     await tradePage.assertMargin();
     await tradePage.assertThereIsNoCommisionAndSwap();
-    await tradePage.assertThereIsTPSL();
-    
+    await tradePage.assertThereIsNoTPSL();
+
     await tradePage.closePosition();
 });

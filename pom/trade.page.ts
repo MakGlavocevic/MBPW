@@ -29,7 +29,12 @@ export class TradePage {
     balanceBeforeOpenPosition: number;
     buyPriceWhenTradeWasOpened: number;
     sellPriceWhenTradeWasOpened: number;
-
+    readonly TP_POSITION_TABLE: Locator;
+    readonly SL_POSITION_TABLE: Locator;
+    readonly SWAP_POSITION_TABLE: Locator;
+    readonly COMMISION_POSITION_TABLE: Locator;
+    readonly POSITION_CLOSE_BUTTON: Locator;
+    readonly POSITION_EDIT_BUTTON: Locator;
     constructor(page: Page) {
         this.page = page;
         this.INVALID_EMAIL_OR_PASSWORD_ERROR = page.locator('[class="style_message__PKH_2 style_error__fKZrk"]');
@@ -55,6 +60,12 @@ export class TradePage {
         this.ENTRY_PRICE_TABLE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[5]/span[1]/span[1]');
         this.CURRENT_PRICE_TABLE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[6]/div[1]/div[1]/span[1]');
         this.MARGIN_POSITION_TABLE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[10]/span[1]');
+        this.TP_POSITION_TABLE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[7]/span[1]');
+        this.SL_POSITION_TABLE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[8]/span[1]');
+        this.SWAP_POSITION_TABLE = page.locator('//tbody/tr[1]/td[11]');
+        this.COMMISION_POSITION_TABLE = page.locator('//tbody/tr[1]/td[12]');
+        this.POSITION_CLOSE_BUTTON = page.locator('//tbody/tr[1]/td[13]/div[1]/button[2]');
+        this.POSITION_EDIT_BUTTON = page.locator('//tbody/tr[1]/td[13]/div[1]/button[1]');
     }
 
     async navigateToTradePage(): Promise<void> {
@@ -109,7 +120,7 @@ export class TradePage {
             case 'SELL':
                 await expect(this.SELL_SHORT_BUTTON).toBeVisible();
                 await this.SELL_SHORT_BUTTON.click();
-                this.sellPriceWhenTradeWasOpened = await this.currentBuyPrice();
+                this.sellPriceWhenTradeWasOpened = await this.currentSellPrice();
                 await expect(this.SELL_POSITION_LABEL).toBeVisible();
                 break;
                 
@@ -130,10 +141,14 @@ export class TradePage {
         }
 
         try {
-            await expect(this.balanceBeforeOpenPosition).toBe(balanceOpenPositionCalculation);
+            await expect.soft(this.balanceBeforeOpenPosition).toBe(balanceOpenPositionCalculation);
         } catch (error) {
             throw new Error('Balance before open position calculation is incorrect');
         }
+
+        await expect.soft(this.POSITION_CLOSE_BUTTON).toBeVisible();
+        await expect.soft(this.POSITION_EDIT_BUTTON).toBeVisible();
+
     }
 
     async assertEntryPrice(positionSide: string): Promise<void> {
@@ -309,5 +324,18 @@ export class TradePage {
       }
      }
 
+     async assertThereIsNoCommisionAndSwap(): Promise<void> {
+
+        await expect.soft(this.SWAP_POSITION_TABLE).toHaveText('0');
+        await expect.soft(this.COMMISION_POSITION_TABLE).toHaveText('0');
+       
+     }
+
+     async assertThereIsNoTPSL(): Promise<void> {
+
+        await expect.soft(this.TP_POSITION_TABLE).toHaveText('0');
+        await expect.soft(this.SL_POSITION_TABLE).toHaveText('0');
+       
+     }
 
 }
