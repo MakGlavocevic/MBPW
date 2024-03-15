@@ -37,7 +37,6 @@ test('User successfully signs in and logs out', async ({ page }) => {
 });
 
 test('User unsuccessfully signs in', async ({ page }) => {
-
   const loginPage = new LoginPage(page);
 
   await test.step(`Navigate to the login screen`, async () => {

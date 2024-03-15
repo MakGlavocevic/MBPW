@@ -9,15 +9,16 @@ test.beforeEach(async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.navigateToLoginPage();
   await loginPage.assertThatUserIsOnLoginPage();
+
   await loginPage.loginWithCredentials(testConfig.username, testConfig.password);
   await loginPage.wait15SecondsForUserToFinishCaptcha();
   await loginPage.assertThatUserIsOnOTPPage();
   await loginPage.userEntersOTPCode();
+
   await loginPage.userIsSignedIn();
 });
 
 test('User successfully opens and closes a hedging BUY position', async ({ page }) => {
-
     const homePage = new HomePage(page);
     await homePage.selectHedgingTradeAccount();
 
@@ -37,7 +38,6 @@ test('User successfully opens and closes a hedging BUY position', async ({ page 
 });
 
 test('User successfully opens and closes a hedging SELL position', async ({ page }) => {
-
     const homePage = new HomePage(page);
     await homePage.selectHedgingTradeAccount();
 
