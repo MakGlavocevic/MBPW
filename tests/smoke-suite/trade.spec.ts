@@ -23,8 +23,16 @@ test('User successfully opens and closes a hedging BUY position', async ({ page 
 
     const tradePage = new TradePage(page);
     await tradePage.navigateToTradePage();
+
     await tradePage.closeAllPositions();
+
     await tradePage.openEURUSDPosition('BUY');
+    await tradePage.assertEntryPrice('BUY');
+    await tradePage.assertCurrentPrice('BUY');
+    await tradePage.assertMargin();
+    await tradePage.assertThereIsNoCommisionAndSwap();
+    await tradePage.assertThereIsTPSL();
+
     await tradePage.closePosition();
 });
 
@@ -35,7 +43,15 @@ test('User successfully opens and closes a hedging SELL position', async ({ page
 
     const tradePage = new TradePage(page);
     await tradePage.navigateToTradePage();
+
     await tradePage.closeAllPositions();
+
     await tradePage.openEURUSDPosition('SELL');
+    await tradePage.assertEntryPrice('SELL');
+    await tradePage.assertCurrentPrice('SELL');
+    await tradePage.assertMargin();
+    await tradePage.assertThereIsNoCommisionAndSwap();
+    await tradePage.assertThereIsTPSL();
+    
     await tradePage.closePosition();
 });
