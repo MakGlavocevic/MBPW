@@ -6,16 +6,15 @@ export class HomePage {
     readonly HEDGING_TRADING_ACCOUNT: Locator;
     readonly TRADING_ACCOUNT_DROPDOWN_UNOPENED: Locator;
     readonly INVALID_EMAIL_OR_PASSWORD_TEXT: string;
-   
+    readonly WALLET_BACKGROUND: Locator;
 
     constructor(page: Page) {
         this.page = page;
         this.TRADING_ACCOUNT_DROPDOWN_UNOPENED = page.locator('[id="headlessui-popover-button-:rf:"]');
         this.INVALID_EMAIL_OR_PASSWORD_TEXT = 'Invalid email or password. Please try again.';
         this.HEDGING_TRADING_ACCOUNT = page.locator('//span[contains(text(),"650872")]');
+        this.WALLET_BACKGROUND = page.locator('[alt="wallet-background"]');
 
-
-        
     }
 
     async navigateToHomePage(): Promise<void> {
@@ -40,5 +39,16 @@ export class HomePage {
 
         await expect(this.HEDGING_TRADING_ACCOUNT).toBeVisible();
       
+    }
+
+    async userLogOuts(): Promise<void> {
+      
+
+    }
+
+    async assertThatUserNotSignedIn(): Promise<void> {
+      
+        await expect(this.WALLET_BACKGROUND).not.toBeVisible();
+
     }
 }

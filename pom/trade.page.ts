@@ -29,12 +29,18 @@ export class TradePage {
     balanceBeforeOpenPosition: number;
     buyPriceWhenTradeWasOpened: number;
     sellPriceWhenTradeWasOpened: number;
+    tablePositionCloseButtonString: string;
     readonly TP_POSITION_TABLE: Locator;
     readonly SL_POSITION_TABLE: Locator;
     readonly SWAP_POSITION_TABLE: Locator;
     readonly COMMISION_POSITION_TABLE: Locator;
     readonly POSITION_CLOSE_BUTTON: Locator;
     readonly POSITION_EDIT_BUTTON: Locator;
+    readonly CLOSE_MODAL_SUBTITLE: Locator;
+    readonly CLOSE_BUTTON: Locator;
+    readonly POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE: Locator;
+    readonly OK_BUTTON: Locator;
+
     constructor(page: Page) {
         this.page = page;
         this.INVALID_EMAIL_OR_PASSWORD_ERROR = page.locator('[class="style_message__PKH_2 style_error__fKZrk"]');
@@ -65,7 +71,15 @@ export class TradePage {
         this.SWAP_POSITION_TABLE = page.locator('//tbody/tr[1]/td[11]');
         this.COMMISION_POSITION_TABLE = page.locator('//tbody/tr[1]/td[12]');
         this.POSITION_CLOSE_BUTTON = page.locator('//tbody/tr[1]/td[13]/div[1]/button[2]');
+        this.tablePositionCloseButtonString = '//tbody/tr[1]/td[13]/div[1]/button[2]';
         this.POSITION_EDIT_BUTTON = page.locator('//tbody/tr[1]/td[13]/div[1]/button[1]');
+        this.CLOSE_MODAL_SUBTITLE = page.locator('//p[contains(text(),"Are you sure you want to close this position?")]');
+        this.CLOSE_BUTTON = page.locator('//button[contains(text(),"Close")]');
+        this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE = page.locator('//p[contains(text(),"Position Closed Succesfully")]');
+        this.OK_BUTTON = page.locator('//button[contains(text(),"Ok")]');
+       
+
+       
     }
 
     async navigateToTradePage(): Promise<void> {
@@ -80,6 +94,36 @@ export class TradePage {
         expect(this.page.url()).toContain(this.TRADE_DEFAULT_LINK);
 
     }
+
+    async closePosition(): Promise<void> {
+
+        await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
+        await this.POSITION_CLOSE_BUTTON.click();
+
+        await expect(this.CLOSE_MODAL_SUBTITLE).toBeVisible();
+        await expect(this.CLOSE_BUTTON).toBeVisible();
+        await this.CLOSE_BUTTON.click();
+
+        await expect(this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE).toBeVisible();
+        await expect(this.OK_BUTTON).toBeVisible();
+        await this.OK_BUTTON.click();
+     
+        await this.page.waitForTimeout(2000);
+
+    }
+
+    async closeAllPositions(): Promise<void> {
+
+        let notificationButtonVisible: boolean = await this.page.isVisible(this.tablePositionCloseButtonString);
+        
+        while(notificationButtonVisible){
+    
+            await this.closePosition();
+
+            notificationButtonVisible = await this.page.isVisible(this.tablePositionCloseButtonString);
+}
+    }
+
 
     async openEURUSDPosition(positionSide: string): Promise<void> {
 
@@ -226,7 +270,8 @@ export class TradePage {
        const balanceText = await this.BALANCE.textContent();
 
        if (balanceText !== null) {
-        const balanceNumber = parseFloat(balanceText);
+        const balanceFormated = balanceText?.replace(",", "")
+        const balanceNumber = parseFloat(balanceFormated);
         return balanceNumber;
     } else {
         throw new Error('Balance text is null');
@@ -238,7 +283,8 @@ export class TradePage {
         const marginText = await this.MARGIN_ACCOUNT_METRICS.textContent();
  
         if (marginText !== null) {
-         const marginNumber = parseFloat(marginText);
+         const marginFormated = marginText?.replace(",", "")
+         const marginNumber = parseFloat(marginFormated);
          return marginNumber;
      } else {
          throw new Error('Margin text is null');
@@ -250,7 +296,8 @@ export class TradePage {
         const marginText = await this.MARGIN_POSITION_TABLE.textContent();
  
         if (marginText !== null) {
-         const marginNumber = parseFloat(marginText);
+         const marginFormated = marginText?.replace(",", "")
+         const marginNumber = parseFloat(marginFormated);
          return marginNumber;
      } else {
          throw new Error('Margin text is null');
@@ -263,7 +310,8 @@ export class TradePage {
         const pnlText = await this.PNL_FIRST_TRADE.textContent();
  
         if (pnlText !== null) {
-         const pnlNumber = parseFloat(pnlText);
+         const pnlFormated = pnlText?.replace(",", "")   
+         const pnlNumber = parseFloat(pnlFormated);
          return pnlNumber;
      } else {
          throw new Error('PNL text is null');
@@ -278,7 +326,8 @@ export class TradePage {
         const fullBuyPrice = `${buyPrice}${buyPriceLastNumber}`;
 
         if (fullBuyPrice !== null) {
-         const buyPriceNumber = parseFloat(fullBuyPrice);
+         const fullBuyPriceFormated = fullBuyPrice?.replace(",", "")   
+         const buyPriceNumber = parseFloat(fullBuyPriceFormated);
          return buyPriceNumber;
      } else {
          throw new Error('Buy price text is null');
@@ -293,7 +342,8 @@ export class TradePage {
         const fullSellPrice = `${sellPrice}${sellPriceLastNumber}`;
 
         if (fullSellPrice !== null) {
-         const sellPriceNumber = parseFloat(fullSellPrice);
+         const fullSellPriceFormated = fullSellPrice?.replace(",", "")   
+         const sellPriceNumber = parseFloat(fullSellPriceFormated);
          return sellPriceNumber;
      } else {
          throw new Error('Buy price text is null');
@@ -305,7 +355,8 @@ export class TradePage {
         const entryPrice = await this.ENTRY_PRICE_TABLE.textContent();
 
         if (entryPrice !== null) {
-         const entryPriceTableNumber = parseFloat(entryPrice);
+         const entryPriceFormated = entryPrice?.replace(",", "")   
+         const entryPriceTableNumber = parseFloat(entryPriceFormated);
          return entryPriceTableNumber;
      } else {
          throw new Error('Buy table price text is null');
@@ -317,7 +368,8 @@ export class TradePage {
         const currentPrice = await this.CURRENT_PRICE_TABLE.textContent();
 
         if (currentPrice !== null) {
-         const currentPriceTablePrice = parseFloat(currentPrice);
+         const currentPriceFormated = currentPrice?.replace(",", "")   
+         const currentPriceTablePrice = parseFloat(currentPriceFormated);
          return currentPriceTablePrice;
      } else {
          throw new Error('Buy table price text is null');
