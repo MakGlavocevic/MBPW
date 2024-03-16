@@ -89,9 +89,9 @@ export class TradePage {
 
         await expect(this.TRADE_NAVIGATION_BUTTON).toBeVisible();
         await this.TRADE_NAVIGATION_BUTTON.click();
-
+        await this.page.waitForTimeout(1000);
         await this.page.waitForLoadState('load');
-        expect(this.page.url()).toContain(this.TRADE_DEFAULT_LINK);
+        await expect(this.page.url()).toContain(this.TRADE_DEFAULT_LINK);
 
     }
 

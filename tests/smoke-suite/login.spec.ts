@@ -27,6 +27,7 @@ test('User successfully signs in and logs out', async ({ page }) => {
 
    await test.step(`User is signed in`, async () => {
     await loginPage.userIsSignedIn();
+    await homePage.minimizeSupportWindow();
    });
 
    await test.step(`User signs out`, async () => {
