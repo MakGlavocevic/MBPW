@@ -158,6 +158,7 @@ export class TradePage {
                 await expect(this.BUY_LONG_BUTTON).toBeVisible();
                 await this.BUY_LONG_BUTTON.click();
                 this.buyPriceWhenTradeWasOpened = await this.currentBuyPrice();
+                console.log('Buy Price when the trade was opened: ' + this.buyPriceWhenTradeWasOpened);
                 await expect(this.BUY_POSITION_LABEL).toBeVisible();
                 break;
 
@@ -165,6 +166,7 @@ export class TradePage {
                 await expect(this.SELL_SHORT_BUTTON).toBeVisible();
                 await this.SELL_SHORT_BUTTON.click();
                 this.sellPriceWhenTradeWasOpened = await this.currentSellPrice();
+                console.log('Sell Price when the trade was opened: ' + this.sellPriceWhenTradeWasOpened);
                 await expect(this.SELL_POSITION_LABEL).toBeVisible();
                 break;
                 
@@ -176,6 +178,9 @@ export class TradePage {
         const balanceAfterOpenPosition = await this.currentBalance();
         const currentMargin = await this.currentMargin();
         const currentPNL = await this.currentPNL();
+        console.log('You have after opened position: ' + balanceAfterOpenPosition);
+        console.log('Margin of the position: ' + currentMargin);
+        console.log('PNL of the position: ' + currentPNL);
         let balanceOpenPositionCalculation: number;
 
         if (currentPNL < 0) {
@@ -185,6 +190,8 @@ export class TradePage {
         }
 
         try {
+            console.log('Balance before opened position: ' + this.balanceBeforeOpenPosition);
+            console.log('Balance before opened position: ' + balanceOpenPositionCalculation);
             await expect.soft(this.balanceBeforeOpenPosition).toBe(balanceOpenPositionCalculation);
         } catch (error) {
             throw new Error('Balance before open position calculation is incorrect');
@@ -201,6 +208,8 @@ export class TradePage {
             case 'BUY':
                 const entryBuyPrice = await this.entryPriceTable();
                 try {
+                    console.log('Buy price when trade was opened: ' + this.buyPriceWhenTradeWasOpened);
+                    console.log('Entry buy price in the position table: ' + entryBuyPrice);
                     await expect(this.buyPriceWhenTradeWasOpened).toBe(entryBuyPrice);
                 } catch (error) {
                     throw new Error('buy price at the moment of open position does not match the entry price of position in the table');
@@ -210,6 +219,8 @@ export class TradePage {
             case 'SELL':
                 const entrySellPrice = await this.entryPriceTable();
                 try {
+                    console.log('Sell price when trade was opened: ' + this.sellPriceWhenTradeWasOpened);
+                    console.log('Entry Sell price in the position table: ' + entrySellPrice);
                     await expect(this.sellPriceWhenTradeWasOpened).toBe(entrySellPrice);
                 } catch (error) {
                     throw new Error('sell price at the moment of open position does not match the entry price of position in the table');
@@ -228,6 +239,8 @@ export class TradePage {
         const currentMargin = await this.currentMargin();
 
         try {
+            console.log('Position table margin: ' + currentTableMargin);
+            console.log('Account Metrics Margin: ' + currentMargin);
             await expect(currentMargin).toBe(currentTableMargin);
         } catch (error) {
             throw new Error('Margin is not the equal value in position table and account metrics');
@@ -242,6 +255,8 @@ export class TradePage {
                 const currentTableBuyPrice = await this.currentPriceTable();
                 const currentNewSellPrice = await this.currentSellPrice();
                 try {
+                    console.log('Position table current price: ' + currentTableBuyPrice);
+                    console.log('Current sell price: ' + currentNewSellPrice);
                     await expect(currentTableBuyPrice).toBe(currentNewSellPrice);
                 } catch (error) {
                     throw new Error('sell price at the current moment does not match the current price of buy side position in the table');
@@ -252,6 +267,8 @@ export class TradePage {
                 const currentTableSellPrice = await this.currentPriceTable();
                 const currentNewBuyPrice = await this.currentBuyPrice();
                 try {
+                    console.log('Position table current price: ' + currentTableSellPrice);
+                    console.log('Current buy price: ' + currentNewBuyPrice);
                     await expect(currentTableSellPrice).toBe(currentNewBuyPrice);
                 } catch (error) {
                     throw new Error('buy price at the current moment does not match the current price of sell side position in the table');
