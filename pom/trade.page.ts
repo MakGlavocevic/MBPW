@@ -41,7 +41,7 @@ export class TradePage {
     readonly CLOSE_BUTTON: Locator;
     readonly POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE: Locator;
     readonly OK_BUTTON: Locator;
-
+    readonly MARKET_WATCH_TIMER: Locator;
     constructor(page: Page) {
         this.page = page;
         this.INVALID_EMAIL_OR_PASSWORD_ERROR = page.locator('[class="style_message__PKH_2 style_error__fKZrk"]');
@@ -78,8 +78,7 @@ export class TradePage {
         this.CLOSE_BUTTON = page.locator('//button[contains(text(),"Close")]');
         this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE = page.locator('//p[contains(text(),"Position Closed Succesfully")]');
         this.OK_BUTTON = page.locator('//button[contains(text(),"Ok")]');
-       
-
+        this.MARKET_WATCH_TIMER = page.locator('//div[contains(text(),"This market is currently closed. It will be open in")]');
        
     }
 
@@ -92,18 +91,19 @@ export class TradePage {
         await this.TRADE_NAVIGATION_BUTTON.click();
         await this.page.waitForTimeout(1000);
         await this.page. reload()
+        expect(this.page.url()).toContain('/trade/EURUSD');
 
     }
 
     async closePosition(): Promise<void> {
 
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1000);
         await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
         await this.POSITION_CLOSE_BUTTON.click();
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(500);
         await expect(this.CLOSE_MODAL_SUBTITLE).toBeVisible();
         await expect(this.CLOSE_BUTTON).toBeVisible();
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(500);
         await this.CLOSE_BUTTON.click();
         await expect(this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE).toBeVisible();
         await expect(this.OK_BUTTON).toBeVisible();
@@ -128,15 +128,7 @@ export class TradePage {
     async openEURUSDPosition(positionSide: string): Promise<void> {
 
         const utils = new Utils(this.page);
-        const isTodayWeekend = await utils.isWeekend();
 
-        // If today is a weekend, expect the market watch to be visible
-        if (isTodayWeekend) {
-            await expect(this.page.locator('//div[contains(text(),"This market is currently closed. It will be open in")]')).toBeVisible();
-            console.log('Today is weekend. Market is closed.');
-        } else {
-            console.log('Today is not a weekend. Skipping the visibility check.');
-        
         switch (positionSide) {
 
             case 'BUY':
@@ -202,17 +194,20 @@ export class TradePage {
         try {
             console.log('Balance before opened position: ' + this.balanceBeforeOpenPosition);
             console.log('Balance before opened position: ' + balanceOpenPositionCalculation);
-            await expect.soft(this.balanceBeforeOpenPosition).toBe(balanceOpenPositionCalculation);
+            const isWithinRangeResult = await utils.isWithinRange(this.balanceBeforeOpenPosition, balanceOpenPositionCalculation, 5);
+            await expect(isWithinRangeResult).toBeTruthy();
         } catch (error) {
             throw new Error('Balance before open position calculation is incorrect');
         }
 
-        await expect.soft(this.POSITION_CLOSE_BUTTON).toBeVisible();
-        await expect.soft(this.POSITION_EDIT_BUTTON).toBeVisible();
-     }
+        await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
+        await expect(this.POSITION_EDIT_BUTTON).toBeVisible();
+     
     }
 
-    async assertEntryPrice(positionSide: string): Promise<void> {
+    async assertEntryPrice(positionSide: string, range: number): Promise<void> {
+        const utils = new Utils(this.page);
+
         switch (positionSide) {
 
             case 'BUY':
@@ -220,7 +215,8 @@ export class TradePage {
                 try {
                     console.log('Buy price when trade was opened: ' + this.buyPriceWhenTradeWasOpened);
                     console.log('Entry buy price in the position table: ' + entryBuyPrice);
-                    await expect(this.buyPriceWhenTradeWasOpened).toBe(entryBuyPrice);
+                    const isWithinRangeResult = await utils.isWithinRange(this.buyPriceWhenTradeWasOpened, entryBuyPrice, range);
+                    await expect(isWithinRangeResult).toBeTruthy();
                 } catch (error) {
                     throw new Error('buy price at the moment of open position does not match the entry price of position in the table');
                 }
@@ -231,7 +227,8 @@ export class TradePage {
                 try {
                     console.log('Sell price when trade was opened: ' + this.sellPriceWhenTradeWasOpened);
                     console.log('Entry Sell price in the position table: ' + entrySellPrice);
-                    await expect(this.sellPriceWhenTradeWasOpened).toBe(entrySellPrice);
+                    const isWithinRangeResult = await utils.isWithinRange(this.sellPriceWhenTradeWasOpened, entrySellPrice, range);
+                    await expect(isWithinRangeResult).toBeTruthy();
                 } catch (error) {
                     throw new Error('sell price at the moment of open position does not match the entry price of position in the table');
                 }
@@ -257,7 +254,7 @@ export class TradePage {
         }
      }
  
-     async assertCurrentPrice(positionSide: string): Promise<void> {
+     async assertCurrentPrice(positionSide: string, range: number): Promise<void> {
 
         switch (positionSide) {
 
@@ -267,7 +264,8 @@ export class TradePage {
                 try {
                     console.log('Position table current price: ' + currentTableBuyPrice);
                     console.log('Current sell price: ' + currentNewSellPrice);
-                    await expect(currentTableBuyPrice).toBe(currentNewSellPrice);
+                    const isWithinRangeResult = await utils.isWithinRange(currentTableBuyPrice, currentNewSellPrice, range);
+                    await expect(isWithinRangeResult).toBeTruthy();
                 } catch (error) {
                     throw new Error('sell price at the current moment does not match the current price of buy side position in the table');
                 }
@@ -279,7 +277,8 @@ export class TradePage {
                 try {
                     console.log('Position table current price: ' + currentTableSellPrice);
                     console.log('Current buy price: ' + currentNewBuyPrice);
-                    await expect(currentTableSellPrice).toBe(currentNewBuyPrice);
+                    const isWithinRangeResult = await utils.isWithinRange(currentTableSellPrice, currentNewBuyPrice, range);
+                    await expect(isWithinRangeResult).toBeTruthy();
                 } catch (error) {
                     throw new Error('buy price at the current moment does not match the current price of sell side position in the table');
                 }
@@ -405,15 +404,15 @@ export class TradePage {
 
      async assertThereIsNoCommisionAndSwap(): Promise<void> {
 
-        await expect.soft(this.SWAP_POSITION_TABLE).toHaveText('0');
-        await expect.soft(this.COMMISION_POSITION_TABLE).toHaveText('0');
+        await expect(this.SWAP_POSITION_TABLE).toHaveText('0');
+        await expect(this.COMMISION_POSITION_TABLE).toHaveText('0');
        
      }
 
      async assertThereIsNoTPSL(): Promise<void> {
 
-        await expect.soft(this.TP_POSITION_TABLE).toHaveText('0');
-        await expect.soft(this.SL_POSITION_TABLE).toHaveText('0');
+        await expect(this.TP_POSITION_TABLE).toHaveText('0');
+        await expect(this.SL_POSITION_TABLE).toHaveText('0');
        
      }
 

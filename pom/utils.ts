@@ -13,4 +13,10 @@ export class Utils {
         return dayOfWeek === 0 || dayOfWeek === 6;
     }
 
+
+    async isWithinRange(value: number, target: number, range: number): Promise<boolean> {
+        const lowerBound = target - range;
+        const upperBound = target + range;
+        return value >= lowerBound && value <= upperBound;
+    }
 } 
