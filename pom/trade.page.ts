@@ -1,4 +1,5 @@
 import { Page, BrowserContext, Locator, expect } from '@playwright/test';
+import { Utils } from '../pom/utils';
 
 export class TradePage {
     readonly page: Page;
@@ -91,7 +92,7 @@ export class TradePage {
         await this.TRADE_NAVIGATION_BUTTON.click();
         await this.page.waitForTimeout(1000);
         await this.page. reload()
-        
+
     }
 
     async closePosition(): Promise<void> {
@@ -126,6 +127,16 @@ export class TradePage {
 
     async openEURUSDPosition(positionSide: string): Promise<void> {
 
+        const utils = new Utils(this.page);
+        const isTodayWeekend = await utils.isWeekend();
+
+        // If today is a weekend, expect the market watch to be visible
+        if (isTodayWeekend) {
+            await expect(this.page.locator('//div[contains(text(),"This market is currently closed. It will be open in")]')).toBeVisible();
+            console.log('Today is weekend. Market is closed.');
+        } else {
+            console.log('Today is not a weekend. Skipping the visibility check.');
+        
         switch (positionSide) {
 
             case 'BUY':
@@ -198,7 +209,7 @@ export class TradePage {
 
         await expect.soft(this.POSITION_CLOSE_BUTTON).toBeVisible();
         await expect.soft(this.POSITION_EDIT_BUTTON).toBeVisible();
-
+     }
     }
 
     async assertEntryPrice(positionSide: string): Promise<void> {

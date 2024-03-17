@@ -31,8 +31,8 @@ test('User successfully opens and closes a hedging BUY position', async ({ page 
 
     await tradePage.closeAllPositions();
 
- /*   await tradePage.openEURUSDPosition('BUY');
-    await tradePage.assertEntryPrice('BUY');
+    await tradePage.openEURUSDPosition('BUY');
+  /*   await tradePage.assertEntryPrice('BUY');
     await tradePage.assertCurrentPrice('BUY');
     await tradePage.assertMargin();
     await tradePage.assertThereIsNoCommisionAndSwap();
