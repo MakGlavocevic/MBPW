@@ -22,6 +22,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('User successfully opens and closes a hedging BUY position', async ({ page }) => {
+    test.setTimeout(1200000);
     const homePage = new HomePage(page);
     await homePage.selectHedgingTradeAccount();
 

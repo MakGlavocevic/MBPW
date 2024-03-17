@@ -26,6 +26,8 @@ export class HomePage {
             width: 1920,
             height: 1080,
           });
+          console.log('User is on homepage');
+               
 
     }
 
@@ -36,6 +38,7 @@ export class HomePage {
 
         await expect(this.HEDGING_TRADING_ACCOUNT).toBeVisible();
         await this.HEDGING_TRADING_ACCOUNT.click();
+        console.log('User selected hedging account');
 
         await this.page.waitForTimeout(1000);
 
@@ -52,7 +55,7 @@ export class HomePage {
         await this.LOG_OUT_BUTTON.click();
 
         await this.page.waitForTimeout(1000);
-
+        console.log('User is logged out');
     }
 
     async assertThatUserNotSignedIn(): Promise<void> {
@@ -62,14 +65,10 @@ export class HomePage {
     }
 
     async minimizeSupportWindow(): Promise<void> {
-      
-        const isMinimizeButtonVisible = await this.SUPPORT_WINDOW_MINIMIZE.isVisible();
 
-        if (isMinimizeButtonVisible) {
-            await expect(this.SUPPORT_WINDOW_MINIMIZE).toBeVisible();
-            await this.SUPPORT_WINDOW_MINIMIZE.click();
-        }
-
-    }
-
-}
+       const supportFrameWindow =  this.page.frameLocator('[name="chat-widget"]');
+    
+       if (await supportFrameWindow.locator(this.SUPPORT_WINDOW_MINIMIZE).isVisible()){
+       await supportFrameWindow.locator(this.SUPPORT_WINDOW_MINIMIZE).click();}
+   } 
+} 

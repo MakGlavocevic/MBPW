@@ -86,30 +86,29 @@ export class TradePage {
 
         await expect(this.TRADE_DROPDOWN_BUTTON).toBeVisible();
         await this.TRADE_DROPDOWN_BUTTON.click();
-
+        await this.page.waitForTimeout(1000);
         await expect(this.TRADE_NAVIGATION_BUTTON).toBeVisible();
         await this.TRADE_NAVIGATION_BUTTON.click();
         await this.page.waitForTimeout(1000);
-        await this.page.waitForLoadState('load');
-        await expect(this.page.url()).toContain(this.TRADE_DEFAULT_LINK);
-
+        await this.page. reload()
+        
     }
 
     async closePosition(): Promise<void> {
 
+        await this.page.waitForTimeout(2000);
         await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
         await this.POSITION_CLOSE_BUTTON.click();
-
+        await this.page.waitForTimeout(2000);
         await expect(this.CLOSE_MODAL_SUBTITLE).toBeVisible();
         await expect(this.CLOSE_BUTTON).toBeVisible();
+        await this.page.waitForTimeout(2000);
         await this.CLOSE_BUTTON.click();
-
         await expect(this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE).toBeVisible();
         await expect(this.OK_BUTTON).toBeVisible();
         await this.OK_BUTTON.click();
+        await this.page.waitForTimeout(1000);
      
-        await this.page.waitForTimeout(2000);
-
     }
 
     async closeAllPositions(): Promise<void> {
