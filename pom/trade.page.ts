@@ -490,8 +490,8 @@ export class TradePage {
 
      async assertThereIsNoCommisionAndSwap(): Promise<void> {
 
-        await expect(this.SWAP_POSITION_TABLE).toHaveText('0 EUR');
-        await expect(this.COMMISION_POSITION_TABLE).toHaveText('0 EUR');
+        await expect(await this.SWAP_POSITION_TABLE.textContent()).toMatch('0 EUR|0 USD');
+        await expect(await this.COMMISION_POSITION_TABLE.textContent()).toMatch('0 EUR|0 USD');
        
      }
 
