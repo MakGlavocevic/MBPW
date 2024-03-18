@@ -22,7 +22,7 @@ test.beforeEach(async ({ page }) => {
   await homePage.minimizeSupportWindow();
 });
 
-test('User successfully opens and closes a hedging BUY position', async ({ page }) => {
+test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke', '@trade'] }, async ({ page }) => {
     test.setTimeout(1200000);
     const homePage = new HomePage(page);
     await homePage.selectHedgingTradeAccount();
@@ -51,7 +51,7 @@ test('User successfully opens and closes a hedging BUY position', async ({ page 
     }
 });
 
-/* test('User successfully opens and closes a hedging SELL position', async ({ page }) => {
+/* test('User successfully opens and closes a hedging SELL position', { tag: ['@smoke', '@trade'] }, async ({ page }) => {
     const homePage = new HomePage(page);
     await homePage.selectHedgingTradeAccount();
 

@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
   await homePage.navigateToHomePage();
 });
 
-test('User successfully signs in and logs out', async ({ page }) => {
+test('User successfully signs in and logs out', { tag: ['@smoke', '@login'] }, async ({ page }) => {
   const homePage = new HomePage(page);
   const loginPage = new LoginPage(page);
 
@@ -37,7 +37,7 @@ test('User successfully signs in and logs out', async ({ page }) => {
 
 });
 
-test('User unsuccessfully signs in', async ({ page }) => {
+test('User unsuccessfully signs in', { tag: ['@smoke', '@login'] }, async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await test.step(`Navigate to the login screen`, async () => {

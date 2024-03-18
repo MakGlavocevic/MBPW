@@ -9,6 +9,7 @@ export class HomePage {
     readonly WALLET_BACKGROUND: Locator;
     readonly LOG_OUT_BUTTON: Locator;
     readonly SUPPORT_WINDOW_MINIMIZE: Locator;
+    readonly SUPPORT_WINDOW: string;
     constructor(page: Page) {
         this.page = page;
         this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON = page.locator('[alt="user-icon"]');
@@ -17,6 +18,7 @@ export class HomePage {
         this.WALLET_BACKGROUND = page.locator('[alt="wallet-background"]');
         this.LOG_OUT_BUTTON = page.locator('//button[contains(text(),"Log Out")]');
         this.SUPPORT_WINDOW_MINIMIZE = page.locator('[aria-label="Minimize window"]');
+        this.SUPPORT_WINDOW = '[name="chat-widget"]';
     }
 
     async navigateToHomePage(): Promise<void> {
