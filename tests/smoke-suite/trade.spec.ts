@@ -48,6 +48,10 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
         await tradePage.assertThereIsNoTPSL();
       
         await tradePage.closePosition();
+        await tradePage.assertBalanceAfterClosedPosition();
+        await tradePage.assertAccountMetricsNoPositions();
+
+        await tradePage.assertOrderHistory('BUY');
     }
 });
 
@@ -74,6 +78,10 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
           await tradePage.assertThereIsNoCommisionAndSwap();
           await tradePage.assertThereIsNoTPSL();
       
-          await tradePage.closePosition(); 
+          await tradePage.closePosition();
+          await tradePage.assertBalanceAfterClosedPosition();
+          await tradePage.assertAccountMetricsNoPositions();
+
+           await tradePage.assertOrderHistory('SELL');
         }
 }); */

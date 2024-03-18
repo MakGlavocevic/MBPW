@@ -14,7 +14,7 @@ export class HomePage {
         this.page = page;
         this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON = page.locator('[alt="user-icon"]');
         this.INVALID_EMAIL_OR_PASSWORD_TEXT = 'Invalid email or password. Please try again.';
-        this.HEDGING_TRADING_ACCOUNT = page.locator('//span[contains(text(),"650872")]');
+        this.HEDGING_TRADING_ACCOUNT = page.locator('//span[contains(text(),"650991")]');
         this.WALLET_BACKGROUND = page.locator('[alt="wallet-background"]');
         this.LOG_OUT_BUTTON = page.locator('//button[contains(text(),"Log Out")]');
         this.SUPPORT_WINDOW_MINIMIZE = page.locator('[aria-label="Minimize window"]');

@@ -17,6 +17,7 @@ export class Utils {
     async isWithinRange(value: number, target: number, range: number): Promise<boolean> {
         const lowerBound = target - range;
         const upperBound = target + range;
+        console.log('The value range is between lower ' + lowerBound + ' and upper ' + upperBound);
         return value >= lowerBound && value <= upperBound;
     }
 } 
