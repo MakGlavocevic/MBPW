@@ -31,6 +31,10 @@ export class TradePage {
     balanceAfterClosedPosition: number;
     buyPriceWhenTradeWasOpened: number;
     sellPriceWhenTradeWasOpened: number;
+    marginWhenOpenPosition: number;
+    currentMargin: number;
+    closedPriceWhenClosing: number;
+    positionUnits: number;
     tablePositionCloseButtonString: string;
     pnlValueWhenClosing: number;
     readonly TP_POSITION_TABLE: Locator;
@@ -45,8 +49,14 @@ export class TradePage {
     readonly OK_BUTTON: Locator;
     readonly MARKET_WATCH_TIMER: Locator;
     readonly CLOSED_PNL: Locator;
+    readonly TABLE_POSITION_UNITS: Locator;
+    readonly CLOSED_PRICE_COLUMN_LABEL: Locator;
+    readonly ORDER_HISTORY_TAB: Locator;
+    readonly BALANCE_ACCOUNT_METRICS: Locator;
+    readonly EQUITY_ACCOUNT_METRICS: Locator;
+    readonly ORDER_HISTORY_SIDE: Locator;
+    readonly CLOSED_PRICE: Locator;
 
- 
     constructor(page: Page) {
         this.page = page;
         this.INVALID_EMAIL_OR_PASSWORD_ERROR = page.locator('[class="style_message__PKH_2 style_error__fKZrk"]');
@@ -85,6 +95,13 @@ export class TradePage {
         this.OK_BUTTON = page.locator('//button[contains(text(),"Ok")]');
         this.MARKET_WATCH_TIMER = page.locator('//div[contains(text(),"This market is currently closed. It will be open in")]');
         this.CLOSED_PNL = page.locator('//html[1]/body[1]/div[7]/div[1]/div[1]/div[1]/div[1]/div[2]/p[1]/div[1]/div[2]/div[3]/div[1]/div[1]/span[1]');
+        this.TABLE_POSITION_UNITS = page.locator('//tbody/tr[1]/td[4]/span[1]');
+        this.CLOSED_PRICE_COLUMN_LABEL = page.locator('//th[contains(text(),"Closed Price")]');
+        this.ORDER_HISTORY_TAB = page.locator('//span[contains(text(),"Order History")]');
+        this.BALANCE_ACCOUNT_METRICS = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[1]/div[2]/div[1]/div[1]/p[2]');
+        this.EQUITY_ACCOUNT_METRICS = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[1]/div[2]/div[1]/div[1]/p[4]');
+        this.ORDER_HISTORY_SIDE = page.locator('//tbody/tr[1]/td[3]/span[1]');
+      
     }
 
     async navigateToTradePage(): Promise<void> {
@@ -104,15 +121,15 @@ export class TradePage {
     async closePosition(): Promise<void> {
 
         await this.page.waitForTimeout(1000);
-
+        this.closedPriceWhenClosing = await this.currentPriceTable();
         await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
-        await expect(this.CLOSED_PNL).toBeVisible();
-        this.pnlValueWhenClosing = await this.closedPositionPNL();
         await this.POSITION_CLOSE_BUTTON.click();
         await this.page.waitForTimeout(500);
 
+        await expect(this.CLOSED_PNL).toBeVisible();
         await expect(this.CLOSE_MODAL_SUBTITLE).toBeVisible();
         await expect(this.CLOSE_BUTTON).toBeVisible();
+        this.pnlValueWhenClosing = await this.closedPositionPNL();
         await this.CLOSE_BUTTON.click();
         await this.page.waitForTimeout(500);
 
@@ -210,8 +227,9 @@ export class TradePage {
         }
 
         const balanceAfterOpenPosition = await this.currentYouHaveBalance();
-        const currentMargin = await this.currentMargin();
+        const currentMargin = await this.marginAccountMetrics();
         const currentPNL = await this.currentPNL();
+        this.positionUnits = await this.openPositionUnits()
         let balanceOpenPositionCalculation: number;
 
         if (currentPNL < 0) {
@@ -271,13 +289,13 @@ export class TradePage {
 
      async assertMargin(): Promise<void> {
 
-        const currentTableMargin = await this.currentTableMargin();
-        const currentMargin = await this.currentMargin();
+        this.marginWhenOpenPosition = await this.currentTableMargin();
+        this.currentMargin = await this.marginAccountMetrics();
 
         try {
-            console.log('Position table margin: ' + currentTableMargin);
-            console.log('Account Metrics Margin: ' + currentMargin);
-            await expect.soft(currentMargin).toBe(currentTableMargin);
+            console.log('Position table margin: ' + this.marginWhenOpenPosition);
+            console.log('Account Metrics Margin: ' + this.currentMargin);
+            await expect.soft(this.currentMargin).toBe(this.marginWhenOpenPosition);
         } catch (error) {
             throw new Error('Margin is not the equal value in position table and account metrics');
         }
@@ -335,7 +353,7 @@ export class TradePage {
      }
     }
 
-    async currentMargin(): Promise<number> {
+    async marginAccountMetrics(): Promise<number> {
 
         const marginText = await this.MARGIN_ACCOUNT_METRICS.textContent();
  
@@ -377,13 +395,29 @@ export class TradePage {
          throw new Error('PNL text is null');
       }
      }
+     
+     async openPositionUnits(): Promise<number> {
+
+        const positionUnits = await this.TABLE_POSITION_UNITS.textContent();
+ 
+        if (positionUnits !== null) {
+         console.log('Current table pnl: ' + positionUnits);
+         const positionUnitsFormated = positionUnits?.replace(",", "")
+         const positionUnitsFormated2 = positionUnitsFormated?.replace("EUR", "")
+         const positionUnitsFormated3 = positionUnitsFormated2?.replace("USD", "")
+         const positionUnitsNumber = parseFloat(positionUnitsFormated3);
+         return positionUnitsNumber;
+     } else {
+         throw new Error('Units text is null');
+      }
+     }
 
      async closedPositionPNL(): Promise<number> {
 
         const pnlText = await this.CLOSED_PNL.textContent();
  
         if (pnlText !== null) {
-         console.log('Closed table pnl: ' + pnlText);
+         console.log('Closed modal pnl: ' + pnlText);
          const pnlFormated = pnlText?.replace(",", "")   
          const pnlNumber = parseFloat(pnlFormated);
          return pnlNumber;
@@ -484,7 +518,7 @@ export class TradePage {
 
      async balanceAccountMetrics(): Promise<number> {
 
-        const currentPrice = await this.ACCOUNT_METRICS_BALANCE.textContent();
+        const currentPrice = await this.BALANCE_ACCOUNT_METRICS.textContent();
 
         if (currentPrice !== null) {
          console.log('Current price: ' + currentPrice);
@@ -498,7 +532,7 @@ export class TradePage {
 
      async equityAccountMetrics(): Promise<number> {
 
-        const currentPrice = await this.ACCOUNT_METRICS_EQUITY.textContent();
+        const currentPrice = await this.EQUITY_ACCOUNT_METRICS.textContent();
 
         if (currentPrice !== null) {
          console.log('Current price: ' + currentPrice);
@@ -512,7 +546,7 @@ export class TradePage {
 
      async freeAccountMetrics(): Promise<number> {
 
-        const currentPrice = await this.ACCOUNT_METRICS_FREE_MARGIN.textContent();
+        const currentPrice = await this.MARGIN_ACCOUNT_METRICS.textContent();
 
         if (currentPrice !== null) {
          console.log('Current price: ' + currentPrice);
@@ -538,27 +572,49 @@ export class TradePage {
         await expect(balance).toBe(freeMargin);
      }
 
-     async assertOrderHistory(positionSide: string): Promise<void> {
+     async assertOrderHistory(positionSide: string, range: number): Promise<void> {
+
+        const utils = new Utils(this.page);
 
         let orderHistoryPNL: number;
         let orderHistoryClosedPrice: number;
-        let orderHistoryEntryPrice: number;
+        let orderHistoryMargin: number;
         let orderHistoryUnits: number;
-        
+
+        orderHistoryPNL = await this.orderHistoryTablePNL();
+        orderHistoryClosedPrice = await this.orderHistoryTableClosedPrice();
+        orderHistoryMargin = await this.orderHistoryTableMargin();
+        orderHistoryUnits = await this.orderHistoryTableUnits();
+
         switch (positionSide) {
 
             case 'BUY':
-                
+                await expect(this.ORDER_HISTORY_SIDE).toContainText('BUY');
                 break;
 
             case 'SELL':
-               
+                await expect(this.ORDER_HISTORY_SIDE).toContainText('SELL');
                 break;
                 
             default:
                 console.log('Unknown side: ' + positionSide);
                 break;
         }
-      
+
+        const isWithinRangeResultClosedPrice = await utils.isWithinRange(orderHistoryClosedPrice, this.closedPriceWhenClosing, range);
+        await expect(isWithinRangeResultClosedPrice).toBeTruthy();
+        await expect(orderHistoryPNL).toBe(this.pnlValueWhenClosing);
+        await expect.soft(orderHistoryMargin).toBe(this.marginWhenOpenPosition);
+        await expect.soft(orderHistoryMargin).toBe(this.currentMargin);
+        await expect(orderHistoryUnits).toBe(this.positionUnits);
+
+     }
+
+     async navigateToOrderHistoryTab(): Promise<void> {
+
+        await expect(this.ORDER_HISTORY_TAB).toBeVisible();
+        await this.ORDER_HISTORY_TAB.click();
+        await expect(this.CLOSED_PRICE_COLUMN_LABEL).toBeVisible();
+
      }
 }

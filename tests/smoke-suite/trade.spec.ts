@@ -51,7 +51,8 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
         await tradePage.assertBalanceAfterClosedPosition();
         await tradePage.assertAccountMetricsNoPositions();
 
-        await tradePage.assertOrderHistory('BUY');
+        await tradePage.navigateToOrderHistoryTab();
+        await tradePage.assertOrderHistory('BUY', 0.0001);
     }
 });
 
@@ -82,6 +83,6 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
           await tradePage.assertBalanceAfterClosedPosition();
           await tradePage.assertAccountMetricsNoPositions();
 
-           await tradePage.assertOrderHistory('SELL');
+           await tradePage.assertOrderHistory('SELL', 0.0001);
         }
 }); */
