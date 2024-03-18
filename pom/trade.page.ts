@@ -521,12 +521,12 @@ export class TradePage {
         const currentPrice = await this.BALANCE_ACCOUNT_METRICS.textContent();
 
         if (currentPrice !== null) {
-         console.log('Current price: ' + currentPrice);
+         console.log('Balance account metrics: ' + currentPrice);
          const currentPriceFormated = currentPrice?.replace(",", "")   
          const currentPriceTablePrice = parseFloat(currentPriceFormated);
          return currentPriceTablePrice;
      } else {
-         throw new Error('Buy table price text is null');
+         throw new Error('Balance account metrics text is null');
       }
      }
 
@@ -535,7 +535,21 @@ export class TradePage {
         const currentPrice = await this.EQUITY_ACCOUNT_METRICS.textContent();
 
         if (currentPrice !== null) {
-         console.log('Current price: ' + currentPrice);
+         console.log('Equity account metrics: ' + currentPrice);
+         const currentPriceFormated = currentPrice?.replace(",", "")   
+         const currentPriceTablePrice = parseFloat(currentPriceFormated);
+         return currentPriceTablePrice;
+     } else {
+         throw new Error('Equity account metrics text is null');
+      }
+     }
+
+     async freeMarginAccountMetrics(): Promise<number> {
+
+        const currentPrice = await this.MARGIN_ACCOUNT_METRICS.textContent();
+
+        if (currentPrice !== null) {
+         console.log('Free margin account metrics: ' + currentPrice);
          const currentPriceFormated = currentPrice?.replace(",", "")   
          const currentPriceTablePrice = parseFloat(currentPriceFormated);
          return currentPriceTablePrice;
@@ -544,17 +558,59 @@ export class TradePage {
       }
      }
 
-     async freeAccountMetrics(): Promise<number> {
+     async orderHistoryTablePNL(): Promise<number> {
 
-        const currentPrice = await this.MARGIN_ACCOUNT_METRICS.textContent();
+        const orderHistoryPNL = await this.ORDER_HISTORY_PNL.textContent();
 
-        if (currentPrice !== null) {
-         console.log('Current price: ' + currentPrice);
-         const currentPriceFormated = currentPrice?.replace(",", "")   
-         const currentPriceTablePrice = parseFloat(currentPriceFormated);
-         return currentPriceTablePrice;
+        if (orderHistoryPNL !== null) {
+         console.log('Order history pnl: ' + orderHistoryPNL);
+         const orderHistoryPNLFormated = orderHistoryPNL?.replace(",", "")   
+         const orderHistoryPNLNumber = parseFloat(orderHistoryPNLFormated);
+         return orderHistoryPNLNumber;
      } else {
-         throw new Error('Buy table price text is null');
+         throw new Error('Order history pnl text is null');
+      }
+     }
+
+     async orderHistoryTableUnits(): Promise<number> {
+
+        const orderHistoryUnits = await this.ORDER_HISTORY_UNITS.textContent();
+
+        if (orderHistoryUnits !== null) {
+         console.log('Order history units: ' + orderHistoryUnits);
+         const orderHistoryUnitsFormated = orderHistoryUnits?.replace(",", "")   
+         const orderHistoryUnitsPrice = parseFloat(orderHistoryUnitsFormated);
+         return orderHistoryUnitsPrice;
+     } else {
+         throw new Error('Order history units text is null');
+      }
+     }
+
+     async orderHistoryTableMargin(): Promise<number> {
+
+        const orderHistoryMargin = await this.ORDER_HISTORY_MARGIN.textContent();
+
+        if (orderHistoryMargin !== null) {
+         console.log('Order history margin: ' + orderHistoryMargin);
+         const orderHistoryMarginFormated = orderHistoryMargin?.replace(",", "")   
+         const orderHistoryMarginPrice = parseFloat(orderHistoryMarginFormated);
+         return orderHistoryMarginPrice;
+     } else {
+         throw new Error('Order history margin text is null');
+      }
+     }
+
+     async orderHistoryTableClosedPrice(): Promise<number> {
+
+        const orderHistoryClosedPrice = await this.ORDER_HISTORY_CLOSED_PRICE.textContent();
+
+        if (orderHistoryClosedPrice !== null) {
+         console.log('Order history closed price: ' + orderHistoryClosedPrice);
+         const orderHistoryClosedPriceFormated = orderHistoryClosedPrice?.replace(",", "")   
+         const orderHistoryClosedPriceNumber = parseFloat(orderHistoryClosedPriceFormated);
+         return orderHistoryClosedPriceNumber;
+     } else {
+         throw new Error('Order history closed price text is null');
       }
      }
 
@@ -566,7 +622,7 @@ export class TradePage {
 
         balance = await this.balanceAccountMetrics();
         equity =  await this.equityAccountMetrics();
-        freeMargin =  await this.freeAccountMetrics();
+        freeMargin =  await this.freeMarginAccountMetrics();
        
         await expect(balance).toBe(equity);
         await expect(balance).toBe(freeMargin);
