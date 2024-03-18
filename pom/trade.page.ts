@@ -53,22 +53,22 @@ export class TradePage {
         this.BUY_INACTIVE_BUTTON = page.locator('[class="style_tab-button__ZR4hy style_tab-button--right__FL_yj justify-end align-center px-16 py-6 style_tab-button--inactive__7y2K5"]');
         this.SELL_INACTIVE_BUTTON = page.locator('[class="style_tab-button__ZR4hy style_tab-button--left__NHKYQ align-center px-16 py-6 style_tab-button--inactive__7y2K5"]');
         this.BALANCE = page.locator('//*[@id="__next"]/div/div/div/div[2]/div/div[5]/div/div[1]/div[2]/div[2]/div/div/div/span[1]');
-        this.POSITION_VALUE_INPUT = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/input[1]');
+        this.POSITION_VALUE_INPUT = page.locator('[class="style_input__7PBqJ"]');
         this.BUY_LONG_BUTTON = page.locator('//button[contains(text(),"Buy / Long")]');
         this.SELL_SHORT_BUTTON = page.locator('//button[contains(text(),"Sell / Short")]');
         this.SELL_POSITION_LABEL = page.locator('//span[contains(text(),"SELL")]');
         this.BUY_POSITION_LABEL = page.locator('//span[contains(text(),"BUY")]');
-        this.MARGIN_ACCOUNT_METRICS = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[2]/div[1]/div[1]/p[6]');
-        this.PNL_FIRST_TRADE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[9]/div[1]/div[1]/div[1]/span[1]');
+        this.MARGIN_ACCOUNT_METRICS = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[2]/div[1]/div[1]/p[6]');
+        this.PNL_FIRST_TRADE = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[9]/div[1]/div[1]/div[1]/span[1]');
         this.BUY_PRICE = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/span[2]/span[1]');
         this.SELL_PRICE = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/span[2]/span[1]');
         this.BUY_PRICE_LAST_NUMBER = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/span[2]/span[2]');
         this.SELL_PRICE_LAST_NUMBER = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/span[2]/span[2]');
-        this.ENTRY_PRICE_TABLE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[5]/span[1]/span[1]');
-        this.CURRENT_PRICE_TABLE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[6]/div[1]/div[1]/span[1]');
-        this.MARGIN_POSITION_TABLE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[10]/span[1]');
-        this.TP_POSITION_TABLE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[7]/span[1]');
-        this.SL_POSITION_TABLE = page.locator('/html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[8]/span[1]');
+        this.ENTRY_PRICE_TABLE = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[5]/span[1]/span[1]');
+        this.CURRENT_PRICE_TABLE = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[6]/div[1]/div[1]/span[1]');
+        this.MARGIN_POSITION_TABLE = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[10]/span[1]');
+        this.TP_POSITION_TABLE = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[7]/span[1]');
+        this.SL_POSITION_TABLE = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[8]/span[1]');
         this.SWAP_POSITION_TABLE = page.locator('//tbody/tr[1]/td[11]');
         this.COMMISION_POSITION_TABLE = page.locator('//tbody/tr[1]/td[12]');
         this.POSITION_CLOSE_BUTTON = page.locator('//tbody/tr[1]/td[13]/div[1]/button[2]');
@@ -91,7 +91,8 @@ export class TradePage {
         await this.TRADE_NAVIGATION_BUTTON.click();
         await this.page.waitForTimeout(1000);
         await this.page. reload()
-        expect(this.page.url()).toContain('/trade/EURUSD');
+        await this.page.waitForLoadState('domcontentloaded')
+        await expect(this.page.url()).toContain('/trade/EURUSD');
 
     }
 
@@ -297,6 +298,7 @@ export class TradePage {
        const balanceText = await this.BALANCE.textContent();
 
        if (balanceText !== null) {
+        console.log('Current You Have balance: ' + balanceText);
         const balanceFormated = balanceText?.replace(",", "")
         const balanceNumber = parseFloat(balanceFormated);
         return balanceNumber;
@@ -310,6 +312,7 @@ export class TradePage {
         const marginText = await this.MARGIN_ACCOUNT_METRICS.textContent();
  
         if (marginText !== null) {
+        console.log('Current account metrics margin: ' + marginText);
          const marginFormated = marginText?.replace(",", "")
          const marginNumber = parseFloat(marginFormated);
          return marginNumber;
@@ -323,6 +326,7 @@ export class TradePage {
         const marginText = await this.MARGIN_POSITION_TABLE.textContent();
  
         if (marginText !== null) {
+        console.log('Current table metrics margin: ' + marginText);
          const marginFormated = marginText?.replace(",", "")
          const marginNumber = parseFloat(marginFormated);
          return marginNumber;
@@ -337,6 +341,7 @@ export class TradePage {
         const pnlText = await this.PNL_FIRST_TRADE.textContent();
  
         if (pnlText !== null) {
+         console.log('Current table pnl: ' + pnlText);
          const pnlFormated = pnlText?.replace(",", "")   
          const pnlNumber = parseFloat(pnlFormated);
          return pnlNumber;
@@ -353,6 +358,7 @@ export class TradePage {
         const fullBuyPrice = `${buyPrice}${buyPriceLastNumber}`;
 
         if (fullBuyPrice !== null) {
+         console.log('Current buy price: ' + fullBuyPrice);
          const fullBuyPriceFormated = fullBuyPrice?.replace(",", "")   
          const buyPriceNumber = parseFloat(fullBuyPriceFormated);
          return buyPriceNumber;
@@ -369,6 +375,7 @@ export class TradePage {
         const fullSellPrice = `${sellPrice}${sellPriceLastNumber}`;
 
         if (fullSellPrice !== null) {
+         console.log('Current sell price: ' + fullSellPrice);
          const fullSellPriceFormated = fullSellPrice?.replace(",", "")   
          const sellPriceNumber = parseFloat(fullSellPriceFormated);
          return sellPriceNumber;
@@ -382,6 +389,7 @@ export class TradePage {
         const entryPrice = await this.ENTRY_PRICE_TABLE.textContent();
 
         if (entryPrice !== null) {
+         console.log('Entry price: ' + entryPrice);
          const entryPriceFormated = entryPrice?.replace(",", "")   
          const entryPriceTableNumber = parseFloat(entryPriceFormated);
          return entryPriceTableNumber;
@@ -395,6 +403,7 @@ export class TradePage {
         const currentPrice = await this.CURRENT_PRICE_TABLE.textContent();
 
         if (currentPrice !== null) {
+         console.log('Current price: ' + currentPrice);
          const currentPriceFormated = currentPrice?.replace(",", "")   
          const currentPriceTablePrice = parseFloat(currentPriceFormated);
          return currentPriceTablePrice;

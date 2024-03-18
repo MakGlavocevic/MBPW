@@ -41,13 +41,13 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
     } else {
         console.log('Today is not a weekend. Skipping the visibility check.');
         await tradePage.openEURUSDPosition('BUY');
-        /*   await tradePage.assertEntryPrice('BUY', range);
-          await tradePage.assertCurrentPrice('BUY', range);
-          await tradePage.assertMargin();
-          await tradePage.assertThereIsNoCommisionAndSwap();
-          await tradePage.assertThereIsNoTPSL();
+        await tradePage.assertEntryPrice('BUY', 0.0001);
+        await tradePage.assertCurrentPrice('BUY', 0.0001);
+        await tradePage.assertMargin();
+        await tradePage.assertThereIsNoCommisionAndSwap();
+        await tradePage.assertThereIsNoTPSL();
       
-          await tradePage.closePosition(); */
+        await tradePage.closePosition();
     }
 });
 
