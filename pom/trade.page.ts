@@ -255,6 +255,7 @@ export class TradePage {
      }
  
      async assertCurrentPrice(positionSide: string, range: number): Promise<void> {
+        const utils = new Utils(this.page);
 
         switch (positionSide) {
 
