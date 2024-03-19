@@ -56,6 +56,11 @@ export class TradePage {
     readonly EQUITY_ACCOUNT_METRICS: Locator;
     readonly ORDER_HISTORY_SIDE: Locator;
     readonly CLOSED_PRICE: Locator;
+    readonly ORDER_HISTORY_PNL: Locator;
+    readonly ORDER_HISTORY_UNITS: Locator;
+    readonly ORDER_HISTORY_MARGIN: Locator;
+    readonly ORDER_HISTORY_CLOSED_PRICE: Locator;
+    
 
     constructor(page: Page) {
         this.page = page;
@@ -101,6 +106,10 @@ export class TradePage {
         this.BALANCE_ACCOUNT_METRICS = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[1]/div[2]/div[1]/div[1]/p[2]');
         this.EQUITY_ACCOUNT_METRICS = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[1]/div[2]/div[1]/div[1]/p[4]');
         this.ORDER_HISTORY_SIDE = page.locator('//tbody/tr[1]/td[3]/span[1]');
+        this.ORDER_HISTORY_PNL = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[8]/div[1]/div[1]/div[1]/span[1]');
+        this.ORDER_HISTORY_UNITS = page.locator('//tbody/tr[4]/td[1]/span[1]');
+        this.ORDER_HISTORY_MARGIN = page.locator('//tbody/tr[1]/td[9]');
+        this.ORDER_HISTORY_CLOSED_PRICE = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[5]/span[1]/span[1]');
       
     }
 
@@ -578,9 +587,11 @@ export class TradePage {
 
         if (orderHistoryUnits !== null) {
          console.log('Order history units: ' + orderHistoryUnits);
-         const orderHistoryUnitsFormated = orderHistoryUnits?.replace(",", "")   
-         const orderHistoryUnitsPrice = parseFloat(orderHistoryUnitsFormated);
-         return orderHistoryUnitsPrice;
+         const positionUnitsFormated = orderHistoryUnits?.replace(",", "")
+         const positionUnitsFormated2 = positionUnitsFormated?.replace("EUR", "")
+         const positionUnitsFormated3 = positionUnitsFormated2?.replace("USD", "")
+         const positionUnitsNumber = parseFloat(positionUnitsFormated3);
+         return positionUnitsNumber;
      } else {
          throw new Error('Order history units text is null');
       }
@@ -592,8 +603,10 @@ export class TradePage {
 
         if (orderHistoryMargin !== null) {
          console.log('Order history margin: ' + orderHistoryMargin);
-         const orderHistoryMarginFormated = orderHistoryMargin?.replace(",", "")   
-         const orderHistoryMarginPrice = parseFloat(orderHistoryMarginFormated);
+         const orderHistoryMarginFormated = orderHistoryMargin?.replace(",", "")  
+         const orderHistoryMarginFormated2 = orderHistoryMarginFormated?.replace("EUR", "")
+         const orderHistoryMarginFormated3 = orderHistoryMarginFormated2?.replace("USD", "") 
+         const orderHistoryMarginPrice = parseFloat(orderHistoryMarginFormated3);
          return orderHistoryMarginPrice;
      } else {
          throw new Error('Order history margin text is null');
