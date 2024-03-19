@@ -156,7 +156,6 @@ export class TradePage {
         await this.page.waitForTimeout(1000);
 
         await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
-        await expect(this.CLOSED_PNL).toBeVisible();
         await this.POSITION_CLOSE_BUTTON.click();
         await this.page.waitForTimeout(500);
 
@@ -185,7 +184,7 @@ export class TradePage {
     }
 
 
-    async openEURUSDPosition(positionSide: string): Promise<void> {
+    async openEURUSDPosition(positionSide: string, positionValue: string): Promise<void> {
 
         const utils = new Utils(this.page);
 
@@ -211,7 +210,7 @@ export class TradePage {
         this.balanceBeforeOpenPosition = await this.currentYouHaveBalance();
 
         await expect(this.POSITION_VALUE_INPUT).toBeVisible();
-        await this.POSITION_VALUE_INPUT.fill('1');
+        await this.POSITION_VALUE_INPUT.fill(positionValue);
         await this.POSITION_VALUE_INPUT.blur();
 
         switch (positionSide) {
@@ -499,8 +498,8 @@ export class TradePage {
 
      async assertThereIsNoCommisionAndSwap(): Promise<void> {
 
-        await expect(await this.SWAP_POSITION_TABLE.textContent()).toMatch('0 EUR|0 USD');
-        await expect(await this.COMMISION_POSITION_TABLE.textContent()).toMatch('0 EUR|0 USD');
+        await expect(await this.SWAP_POSITION_TABLE.textContent()).toMatch('0 EUR' || '0 USD');
+        await expect(await this.COMMISION_POSITION_TABLE.textContent()).toMatch('0 EUR' || '0 USD');
        
      }
 

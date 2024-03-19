@@ -40,7 +40,7 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
         console.log('Today is weekend. Market is closed.');
     } else {
         console.log('Today is not a weekend. Skipping the visibility check.');
-        await tradePage.openEURUSDPosition('BUY');
+        await tradePage.openEURUSDPosition('BUY', '1');
         await tradePage.assertEntryPrice('BUY', 0.0001);
         await tradePage.assertCurrentPrice('BUY', 0.0001);
         await tradePage.assertMargin();
@@ -72,7 +72,7 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
       console.log('Today is weekend. Market is closed.');
     } else {
         console.log('Today is not a weekend. Skipping the visibility check.');
-        await tradePage.openEURUSDPosition('SELL');
+        await tradePage.openEURUSDPosition('SELL', 1);
           await tradePage.assertEntryPrice('SELL', range);
           await tradePage.assertCurrentPrice('SELL', range);
           await tradePage.assertMargin();
