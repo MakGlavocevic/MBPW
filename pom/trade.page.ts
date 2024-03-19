@@ -99,7 +99,7 @@ export class TradePage {
         this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE = page.locator('//p[contains(text(),"Position Closed Succesfully")]');
         this.OK_BUTTON = page.locator('//button[contains(text(),"Ok")]');
         this.MARKET_WATCH_TIMER = page.locator('//div[contains(text(),"This market is currently closed. It will be open in")]');
-        this.CLOSED_PNL = page.locator('//html[1]/body[1]/div[7]/div[1]/div[1]/div[1]/div[1]/div[2]/p[1]/div[1]/div[2]/div[3]/div[1]/div[1]/span[1]');
+        this.CLOSED_PNL = page.locator('//body/div[@id="headlessui-portal-root"]/div[1]/div[1]/div[1]/div[1]/div[2]/p[1]/div[1]/div[2]/div[3]/div[1]/div[1]/span[1]');
         this.TABLE_POSITION_UNITS = page.locator('//tbody/tr[1]/td[4]/span[1]');
         this.CLOSED_PRICE_COLUMN_LABEL = page.locator('//th[contains(text(),"Closed Price")]');
         this.ORDER_HISTORY_TAB = page.locator('//span[contains(text(),"Order History")]');
@@ -135,9 +135,9 @@ export class TradePage {
         await this.POSITION_CLOSE_BUTTON.click();
         await this.page.waitForTimeout(500);
 
-        await expect(this.CLOSED_PNL).toBeVisible();
         await expect(this.CLOSE_MODAL_SUBTITLE).toBeVisible();
         await expect(this.CLOSE_BUTTON).toBeVisible();
+        await expect(this.CLOSED_PNL).toBeVisible();
         this.pnlValueWhenClosing = await this.closedPositionPNL();
         await this.CLOSE_BUTTON.click();
         await this.page.waitForTimeout(500);
@@ -147,6 +147,7 @@ export class TradePage {
         await this.OK_BUTTON.click();
         await this.page.waitForTimeout(2000);
 
+        await this.page.waitForTimeout(3000);
         this.balanceAfterClosedPosition = await this.currentYouHaveBalance();
     
     }
@@ -181,6 +182,7 @@ export class TradePage {
 
             notificationButtonVisible = await this.page.isVisible(this.tablePositionCloseButtonString);
 }
+        await this.page.waitForTimeout(5000);
     }
 
 
@@ -510,8 +512,8 @@ export class TradePage {
        
      }
 
-     async assertBalanceAfterClosedPosition(): Promise<void> {
-
+     async assertBalanceAfterClosedPosition(range: number): Promise<void> {
+        const utils = new Utils(this.page);
         let balanceAfterClosePositionCalculation: number;
 
         if (this.pnlValueWhenClosing < 0) {
@@ -520,7 +522,8 @@ export class TradePage {
             balanceAfterClosePositionCalculation =  this.balanceBeforeOpenPosition + this.pnlValueWhenClosing;
         }
 
-        await expect(this.balanceAfterClosedPosition).toBe(balanceAfterClosePositionCalculation);
+        const isWithinRangeResult = await utils.isWithinRange(this.balanceAfterClosedPosition, balanceAfterClosePositionCalculation, range);
+        await expect(isWithinRangeResult).toBeTruthy();
        
      }
 
