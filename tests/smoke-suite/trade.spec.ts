@@ -22,7 +22,7 @@ test.beforeEach(async ({ page }) => {
   await homePage.minimizeSupportWindow();
 });
 
-test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke', '@trade'] }, async ({ page }) => {
+test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke', '@trade', '@buytrade'] }, async ({ page }) => {
     test.setTimeout(1200000);
     const homePage = new HomePage(page);
     await homePage.selectHedgingTradeAccount();
@@ -58,7 +58,8 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
     }
 });
 
-/* test('User successfully opens and closes a hedging SELL position', { tag: ['@smoke', '@trade'] }, async ({ page }) => {
+ test('User successfully opens and closes a hedging SELL position', { tag: ['@smoke', '@trade', '@selltrade'] }, async ({ page }) => {
+    test.setTimeout(1200000);  
     const homePage = new HomePage(page);
     await homePage.selectHedgingTradeAccount();
 
@@ -75,17 +76,18 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
         console.log('Today is not a weekend. Skipping the visibility check.');
           await tradePage.closeAllPositions();
 
-        await tradePage.openEURUSDPosition('SELL', 1);
-          await tradePage.assertEntryPrice('SELL', range);
-          await tradePage.assertCurrentPrice('SELL', range);
+        await tradePage.openEURUSDPosition('SELL', '1');
+          await tradePage.assertEntryPrice('SELL', 0.0001);
+          await tradePage.assertCurrentPrice('SELL', 0.0001);
           await tradePage.assertMargin();
           await tradePage.assertThereIsNoCommisionAndSwap();
           await tradePage.assertThereIsNoTPSL();
       
           await tradePage.closePosition();
-          await tradePage.assertBalanceAfterClosedPosition();
+          await tradePage.assertBalanceAfterClosedPosition(1);
           await tradePage.assertAccountMetricsNoPositions();
 
-           await tradePage.assertOrderHistory('SELL', 0.0001);
+          await tradePage.navigateToOrderHistoryTab();
+          await tradePage.assertOrderHistory('SELL', 0.0001);
         }
-}); */
+});

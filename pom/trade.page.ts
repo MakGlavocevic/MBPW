@@ -215,7 +215,8 @@ export class TradePage {
 
         await expect(this.POSITION_VALUE_INPUT).toBeVisible();
         await this.POSITION_VALUE_INPUT.fill(positionValue);
-        await this.POSITION_VALUE_INPUT.blur();
+        await this.page.waitForTimeout(1000);
+        await this.MARGIN_ACCOUNT_METRICS.click();
 
         switch (positionSide) {
 
@@ -224,6 +225,7 @@ export class TradePage {
                 await this.BUY_LONG_BUTTON.click();
                 this.buyPriceWhenTradeWasOpened = await this.currentBuyPrice();
                 await expect(this.BUY_POSITION_LABEL).toBeVisible();
+                console.log('User open position with BUY side and minimum value');
                 break;
 
             case 'SELL':
@@ -231,6 +233,7 @@ export class TradePage {
                 await this.SELL_SHORT_BUTTON.click();
                 this.sellPriceWhenTradeWasOpened = await this.currentSellPrice();
                 await expect(this.SELL_POSITION_LABEL).toBeVisible();
+                console.log('User open position with SELL side and minimum value');
                 break;
                 
             default:
@@ -238,6 +241,7 @@ export class TradePage {
                 break;
         }
 
+        await this.page.waitForTimeout(2000);
         const balanceAfterOpenPosition = await this.currentYouHaveBalance();
         const currentMargin = await this.marginAccountMetrics();
         const currentPNL = await this.currentPNL();
@@ -245,9 +249,9 @@ export class TradePage {
         let balanceOpenPositionCalculation: number;
 
         if (currentPNL < 0) {
-            balanceOpenPositionCalculation = balanceAfterOpenPosition + currentMargin - Math.abs(currentPNL);
+            balanceOpenPositionCalculation = balanceAfterOpenPosition + currentMargin + Math.abs(currentPNL);
         } else {
-            balanceOpenPositionCalculation = balanceAfterOpenPosition + currentMargin + currentPNL;
+            balanceOpenPositionCalculation = balanceAfterOpenPosition + currentMargin - currentPNL;
         }
 
         try {
