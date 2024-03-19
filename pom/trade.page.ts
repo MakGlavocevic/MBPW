@@ -14,6 +14,7 @@ export class TradePage {
     readonly SELL_INACTIVE_BUTTON: Locator;
     readonly BALANCE: Locator;
     readonly POSITION_VALUE_INPUT: Locator;
+    readonly POSITION_LOT_INPUT: Locator;
     readonly BUY_LONG_BUTTON: Locator;
     readonly SELL_SHORT_BUTTON: Locator;
     readonly SELL_POSITION_LABEL: Locator;
@@ -61,8 +62,9 @@ export class TradePage {
     readonly ORDER_HISTORY_UNITS: Locator;
     readonly ORDER_HISTORY_MARGIN: Locator;
     readonly ORDER_HISTORY_CLOSED_PRICE: Locator;
-    
-
+    readonly POSITION_SIZE_DROPDOWN_ARROW: Locator;
+    readonly POSITION_SIZE_DROPDOWN_VALUE: Locator;
+    readonly POSITION_SIZE_DROPDOWN_LOT: Locator;
     constructor(page: Page) {
         this.page = page;
         this.INVALID_EMAIL_OR_PASSWORD_ERROR = page.locator('[class="style_message__PKH_2 style_error__fKZrk"]');
@@ -75,6 +77,8 @@ export class TradePage {
         this.SELL_INACTIVE_BUTTON = page.locator('[class="style_tab-button__ZR4hy style_tab-button--left__NHKYQ align-center px-16 py-6 style_tab-button--inactive__7y2K5"]');
         this.BALANCE = page.locator('//*[@id="__next"]/div/div/div/div[2]/div/div[5]/div/div[1]/div[2]/div[2]/div/div/div/span[1]');
         this.POSITION_VALUE_INPUT = page.locator('[class="style_input__7PBqJ"]');
+        this.POSITION_LOT_INPUT = page.locator('[class="style_input__7PBqJ"]');
+        this.POSITION_SIZE_DROPDOWN_ARROW = page.locator('[class="ml-8 size-20 style_icon__WEyPE style_stroke-color__sta1z"]');
         this.BUY_LONG_BUTTON = page.locator('//button[contains(text(),"Buy / Long")]');
         this.SELL_SHORT_BUTTON = page.locator('//button[contains(text(),"Sell / Short")]');
         this.SELL_POSITION_LABEL = page.locator('//span[contains(text(),"SELL")]');
@@ -112,7 +116,9 @@ export class TradePage {
         this.ORDER_HISTORY_MARGIN = page.locator('//tbody/tr[1]/td[9]');
         this.ORDER_HISTORY_CLOSED_PRICE = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[5]/span[1]/span[1]');
         this.FREE_MARGIN_ACCOUNT_METRICS = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[2]/div[1]/div[1]/p[10]');
-    
+        this.POSITION_SIZE_DROPDOWN_VALUE = page.locator('//html[1]/body[1]/div[2]/div[3]/div[1]/button[1]');
+        this.POSITION_SIZE_DROPDOWN_LOT = page.locator('//html[1]/body[1]/div[2]/div[3]/div[1]/button[2]');
+
     }
 
     async navigateToTradePage(): Promise<void> {
@@ -188,7 +194,7 @@ export class TradePage {
     }
 
 
-    async openEURUSDPosition(positionSide: string, positionValue: string): Promise<void> {
+    async openEURUSDPosition(positionSide: string, positionSizeType: string, positionValue: string): Promise<void> {
 
         const utils = new Utils(this.page);
 
@@ -211,10 +217,36 @@ export class TradePage {
                 break;
         }
 
+        await this.page.waitForTimeout(1000);
         this.balanceBeforeOpenPosition = await this.currentYouHaveBalance();
 
-        await expect(this.POSITION_VALUE_INPUT).toBeVisible();
-        await this.POSITION_VALUE_INPUT.fill(positionValue);
+        switch (positionSizeType) {
+
+            case 'Value':
+                await expect(this.POSITION_SIZE_DROPDOWN_ARROW).toBeVisible();
+                await this.POSITION_SIZE_DROPDOWN_ARROW.click();
+                await expect(this.POSITION_SIZE_DROPDOWN_VALUE).toBeVisible();
+                await this.POSITION_SIZE_DROPDOWN_VALUE.click();
+                await this.page.waitForTimeout(1000);
+                await this.POSITION_VALUE_INPUT.fill(positionValue);
+                console.log('User used value for position size');
+                break;
+
+            case 'Lot':
+                await expect(this.POSITION_SIZE_DROPDOWN_ARROW).toBeVisible();
+                await this.POSITION_SIZE_DROPDOWN_ARROW.click();
+                await expect(this.POSITION_SIZE_DROPDOWN_LOT).toBeVisible();
+                await this.POSITION_SIZE_DROPDOWN_LOT.click();
+                await this.page.waitForTimeout(1000);
+                await this.POSITION_LOT_INPUT.fill(positionValue);
+                console.log('User used lots for position size');
+                break;
+                
+            default:
+                console.log('Unknown positione type: ' + positionSizeType);
+                break;
+        }
+
         await this.page.waitForTimeout(1000);
         await this.MARGIN_ACCOUNT_METRICS.click();
 
@@ -311,7 +343,7 @@ export class TradePage {
         try {
             console.log('Position table margin: ' + this.marginWhenOpenPosition);
             console.log('Account Metrics Margin: ' + this.currentMargin);
-            await expect.soft(this.currentMargin).toBe(this.marginWhenOpenPosition);
+            await expect.soft(this.marginWhenOpenPosition).toBe(this.currentMargin);
         } catch (error) {
             throw new Error('Margin is not the equal value in position table and account metrics');
         }
