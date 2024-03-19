@@ -54,6 +54,7 @@ export class TradePage {
     readonly ORDER_HISTORY_TAB: Locator;
     readonly BALANCE_ACCOUNT_METRICS: Locator;
     readonly EQUITY_ACCOUNT_METRICS: Locator;
+    readonly FREE_MARGIN_ACCOUNT_METRICS: Locator;
     readonly ORDER_HISTORY_SIDE: Locator;
     readonly CLOSED_PRICE: Locator;
     readonly ORDER_HISTORY_PNL: Locator;
@@ -103,14 +104,15 @@ export class TradePage {
         this.TABLE_POSITION_UNITS = page.locator('//tbody/tr[1]/td[4]/span[1]');
         this.CLOSED_PRICE_COLUMN_LABEL = page.locator('//th[contains(text(),"Closed Price")]');
         this.ORDER_HISTORY_TAB = page.locator('//span[contains(text(),"Order History")]');
-        this.BALANCE_ACCOUNT_METRICS = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[1]/div[2]/div[1]/div[1]/p[2]');
-        this.EQUITY_ACCOUNT_METRICS = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[1]/div[2]/div[1]/div[1]/p[4]');
+        this.BALANCE_ACCOUNT_METRICS = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[2]/div[1]/div[1]/p[2]');
+        this.EQUITY_ACCOUNT_METRICS = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[2]/div[1]/div[1]/p[4]');
         this.ORDER_HISTORY_SIDE = page.locator('//tbody/tr[1]/td[3]/span[1]');
         this.ORDER_HISTORY_PNL = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[8]/div[1]/div[1]/div[1]/span[1]');
-        this.ORDER_HISTORY_UNITS = page.locator('//tbody/tr[4]/td[1]/span[1]');
+        this.ORDER_HISTORY_UNITS = page.locator('//body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[4]/span[1]');
         this.ORDER_HISTORY_MARGIN = page.locator('//tbody/tr[1]/td[9]');
         this.ORDER_HISTORY_CLOSED_PRICE = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[5]/span[1]/span[1]');
-      
+        this.FREE_MARGIN_ACCOUNT_METRICS = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[2]/div[1]/div[1]/p[10]');
+    
     }
 
     async navigateToTradePage(): Promise<void> {
@@ -557,7 +559,7 @@ export class TradePage {
 
      async freeMarginAccountMetrics(): Promise<number> {
 
-        const currentPrice = await this.MARGIN_ACCOUNT_METRICS.textContent();
+        const currentPrice = await this.FREE_MARGIN_ACCOUNT_METRICS.textContent();
 
         if (currentPrice !== null) {
          console.log('Free margin account metrics: ' + currentPrice);
