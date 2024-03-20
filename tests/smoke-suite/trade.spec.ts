@@ -29,7 +29,6 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
 
     const tradePage = new TradePage(page);
     await tradePage.navigateToTradePage();
-  
 
     const utils = new Utils(page);
     const isTodayWeekend = await utils.isWeekend();
