@@ -35,8 +35,11 @@ export class TradePage {
     marginWhenOpenPosition: number;
     currentMargin: number;
     closedPriceWhenClosing: number;
+    initialMargin: number;
     positionUnits: number;
+    positionValue: number;
     tablePositionCloseButtonString: string;
+    positionSideType: string;
     pnlValueWhenClosing: number;
     readonly TP_POSITION_TABLE: Locator;
     readonly SL_POSITION_TABLE: Locator;
@@ -65,6 +68,8 @@ export class TradePage {
     readonly POSITION_SIZE_DROPDOWN_ARROW: Locator;
     readonly POSITION_SIZE_DROPDOWN_VALUE: Locator;
     readonly POSITION_SIZE_DROPDOWN_LOT: Locator;
+    readonly INITIAL_MARGIN: Locator;
+    
     constructor(page: Page) {
         this.page = page;
         this.INVALID_EMAIL_OR_PASSWORD_ERROR = page.locator('[class="style_message__PKH_2 style_error__fKZrk"]');
@@ -118,7 +123,8 @@ export class TradePage {
         this.FREE_MARGIN_ACCOUNT_METRICS = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[2]/div[1]/div[1]/p[10]');
         this.POSITION_SIZE_DROPDOWN_VALUE = page.locator('//html[1]/body[1]/div[2]/div[3]/div[1]/button[1]');
         this.POSITION_SIZE_DROPDOWN_LOT = page.locator('//html[1]/body[1]/div[2]/div[3]/div[1]/button[2]');
-
+        this.INITIAL_MARGIN = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[1]/div[1]/div[2]/div[3]/div[2]/span[2]');
+       
     }
 
     async navigateToTradePage(): Promise<void> {
@@ -195,8 +201,8 @@ export class TradePage {
 
 
     async openEURUSDPosition(positionSide: string, positionSizeType: string, positionValue: string): Promise<void> {
-
         const utils = new Utils(this.page);
+        this.positionSideType = positionSide;
 
         switch (positionSide) {
 
@@ -229,6 +235,9 @@ export class TradePage {
                 await this.POSITION_SIZE_DROPDOWN_VALUE.click();
                 await this.page.waitForTimeout(1000);
                 await this.POSITION_VALUE_INPUT.fill(positionValue);
+                await this.page.waitForTimeout(500);
+                await this.MARGIN_ACCOUNT_METRICS.click();
+                this.positionValue = await this.currentPositionValue();
                 console.log('User used value for position size');
                 break;
 
@@ -239,6 +248,13 @@ export class TradePage {
                 await this.POSITION_SIZE_DROPDOWN_LOT.click();
                 await this.page.waitForTimeout(1000);
                 await this.POSITION_LOT_INPUT.fill(positionValue);
+                await expect(this.POSITION_SIZE_DROPDOWN_ARROW).toBeVisible();
+                await this.POSITION_SIZE_DROPDOWN_ARROW.click();
+                await expect(this.POSITION_SIZE_DROPDOWN_VALUE).toBeVisible();
+                await this.POSITION_SIZE_DROPDOWN_VALUE.click();
+                await this.page.waitForTimeout(1000);
+                await this.MARGIN_ACCOUNT_METRICS.click();
+                this.positionValue = await this.currentPositionValue();
                 console.log('User used lots for position size');
                 break;
                 
@@ -248,7 +264,8 @@ export class TradePage {
         }
 
         await this.page.waitForTimeout(1000);
-        await this.MARGIN_ACCOUNT_METRICS.click();
+        this.initialMargin = await this.currentInitialMargin();
+        await this.assertInitialMarginCalculation(500)
 
         switch (positionSide) {
 
@@ -348,6 +365,26 @@ export class TradePage {
             throw new Error('Margin is not the equal value in position table and account metrics');
         }
      }
+
+     async assertInitialMargin(range: number): Promise<void> {
+        const utils = new Utils(this.page);
+        this.marginWhenOpenPosition = await this.currentTableMargin();
+        this.currentMargin = await this.marginAccountMetrics();
+
+        try {
+            console.log('Position table margin: ' + this.marginWhenOpenPosition);
+            console.log('Account Metrics Margin: ' + this.currentMargin);
+            console.log('Initial Margin: ' + this.initialMargin);
+            const isWithinRangeResult = await utils.isWithinRange(this.marginWhenOpenPosition, this.initialMargin, range);
+            await expect.soft(isWithinRangeResult).toBeTruthy();
+            const isWithinRangeResult2 = await utils.isWithinRange(this.currentMargin, this.initialMargin, range);
+            await expect.soft(isWithinRangeResult2).toBeTruthy();
+        } catch (error) {
+            throw new Error('Margin is not the equal value in position table and account metrics');
+        }
+     }
+
+     
  
      async assertCurrentPrice(positionSide: string, range: number): Promise<void> {
         const utils = new Utils(this.page);
@@ -536,6 +573,34 @@ export class TradePage {
       }
      }
 
+     async currentInitialMargin(): Promise<number> {
+
+        const currentInitialMargin = await this.INITIAL_MARGIN.textContent();
+
+        if (currentInitialMargin !== null) {
+         console.log('Current initial margin: ' + currentInitialMargin);
+         const currentInitialMarginFormated = currentInitialMargin?.replace(",", "")   
+         const currentInitialMarginValue = parseFloat(currentInitialMarginFormated);
+         return currentInitialMarginValue;
+     } else {
+         throw new Error('Initial margin text is null');
+      }
+     }
+
+     async currentPositionValue(): Promise<number> {
+
+        const currentPositionValue = await this.POSITION_VALUE_INPUT.textContent();
+
+        if (currentPositionValue !== null) {
+         console.log('Current psoition value: ' + currentPositionValue);
+         const currentPositionValueFormated = currentPositionValue?.replace(",", "")   
+         const currentPositionValueValue = parseFloat(currentPositionValueFormated);
+         return currentPositionValueValue;
+     } else {
+         throw new Error('Position Value text is null');
+      }
+     }
+
      async assertThereIsNoCommisionAndSwap(): Promise<void> {
 
         await expect(await this.SWAP_POSITION_TABLE.textContent()).toMatch('0 EUR' || '0 USD');
@@ -679,6 +744,17 @@ export class TradePage {
        
         await expect(balance).toBe(equity);
         await expect(balance).toBe(freeMargin);
+     }
+
+     async assertInitialMarginCalculation(leverage: number): Promise<void> {
+
+        const utils = new Utils(this.page);
+        let leverageValueCalculation: number;
+                
+        leverageValueCalculation = await utils.leverageMarginCalculation(this.positionValue, leverage)
+                
+        await expect(leverageValueCalculation).toBe(this.initialMargin);
+            
      }
 
      async assertOrderHistory(positionSide: string, range: number): Promise<void> {

@@ -45,6 +45,7 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
         await tradePage.openEURUSDPosition('BUY', 'Value', '1');
         await tradePage.assertEntryPrice('BUY', 0.0001);
         await tradePage.assertCurrentPrice('BUY', 0.0001);
+        await tradePage.assertInitialMargin(0.2);
         await tradePage.assertMargin();
         await tradePage.assertThereIsNoCommisionAndSwap();
         await tradePage.assertThereIsNoTPSL();

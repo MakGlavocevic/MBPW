@@ -20,4 +20,13 @@ export class Utils {
         console.log('The value range is between lower ' + lowerBound + ' and upper ' + upperBound);
         return value >= lowerBound && value <= upperBound;
     }
+
+   async leverageMarginCalculation(positionValue: number, leverage: number): Promise<number> {
+     
+        if (leverage === 0) {
+            throw new Error('Leverage cannot be zero');
+        }
+    
+        return positionValue / leverage;
+    }
 } 
