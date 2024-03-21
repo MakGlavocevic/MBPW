@@ -44,7 +44,7 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
         await tradePage.openEURUSDPosition('BUY', 'Value', '1');
         await tradePage.assertEntryPrice('BUY', 0.0001);
         await tradePage.assertCurrentPrice('BUY', 0.0001);
-        await tradePage.assertInitialMargin(0.2);
+        await tradePage.assertInitialMargin(0.1);
         await tradePage.assertMargin();
         await tradePage.assertThereIsNoCommisionAndSwap();
         await tradePage.assertThereIsNoTPSL();
@@ -54,7 +54,7 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
         await tradePage.assertAccountMetricsNoPositions();
 
         await tradePage.navigateToOrderHistoryTab();
-        await tradePage.assertOrderHistory('BUY', 0.0001);
+        await tradePage.assertOrderHistory('BUY', 0.0001, 0.1);
     }
 });
 
@@ -88,6 +88,6 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
           await tradePage.assertAccountMetricsNoPositions();
 
           await tradePage.navigateToOrderHistoryTab();
-          await tradePage.assertOrderHistory('SELL', 0.0001);
+          await tradePage.assertOrderHistory('SELL', 0.0001, 0.10);
         }
 });

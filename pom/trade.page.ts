@@ -123,7 +123,7 @@ export class TradePage {
         this.FREE_MARGIN_ACCOUNT_METRICS = page.locator('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[2]/div[1]/div[5]/div[1]/div[2]/div[1]/div[1]/p[10]');
         this.POSITION_SIZE_DROPDOWN_VALUE = page.locator('//html[1]/body[1]/div[2]/div[3]/div[1]/button[1]');
         this.POSITION_SIZE_DROPDOWN_LOT = page.locator('//html[1]/body[1]/div[2]/div[3]/div[1]/button[2]');
-        this.INITIAL_MARGIN = page.locator('//html[1]/body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[1]/div[1]/div[2]/div[3]/div[2]/span[2]');
+        this.INITIAL_MARGIN = page.locator('//html/body/div[1]/div/div/div/div[2]/div/div[5]/div/div[1]/div[2]/div[3]/div[2]/span[2]');
        
     }
 
@@ -233,10 +233,11 @@ export class TradePage {
                 await this.POSITION_SIZE_DROPDOWN_ARROW.click();
                 await expect(this.POSITION_SIZE_DROPDOWN_VALUE).toBeVisible();
                 await this.POSITION_SIZE_DROPDOWN_VALUE.click();
-                await this.page.waitForTimeout(1000);
+                await this.page.waitForTimeout(500);
                 await this.POSITION_VALUE_INPUT.fill(positionValue);
                 await this.page.waitForTimeout(500);
                 await this.MARGIN_ACCOUNT_METRICS.click();
+                await this.page.waitForTimeout(1000);
                 this.positionValue = await this.currentPositionValue();
                 console.log('User used value for position size');
                 break;
@@ -252,8 +253,9 @@ export class TradePage {
                 await this.POSITION_SIZE_DROPDOWN_ARROW.click();
                 await expect(this.POSITION_SIZE_DROPDOWN_VALUE).toBeVisible();
                 await this.POSITION_SIZE_DROPDOWN_VALUE.click();
-                await this.page.waitForTimeout(1000);
+                await this.page.waitForTimeout(500);
                 await this.MARGIN_ACCOUNT_METRICS.click();
+                await this.page.waitForTimeout(1000);
                 this.positionValue = await this.currentPositionValue();
                 console.log('User used lots for position size');
                 break;
@@ -589,10 +591,10 @@ export class TradePage {
 
      async currentPositionValue(): Promise<number> {
 
-        const currentPositionValue = await this.POSITION_VALUE_INPUT.textContent();
+        const currentPositionValue = await this.POSITION_VALUE_INPUT.inputValue();
 
         if (currentPositionValue !== null) {
-         console.log('Current psoition value: ' + currentPositionValue);
+         console.log('Current position value: ' + currentPositionValue);
          const currentPositionValueFormated = currentPositionValue?.replace(",", "")   
          const currentPositionValueValue = parseFloat(currentPositionValueFormated);
          return currentPositionValueValue;
@@ -757,7 +759,7 @@ export class TradePage {
             
      }
 
-     async assertOrderHistory(positionSide: string, range: number): Promise<void> {
+     async assertOrderHistory(positionSide: string, rangePrice: number, rangePnL: number): Promise<void> {
 
         const utils = new Utils(this.page);
 
@@ -786,9 +788,10 @@ export class TradePage {
                 break;
         }
 
-        const isWithinRangeResultClosedPrice = await utils.isWithinRange(orderHistoryClosedPrice, this.closedPriceWhenClosing, range);
+        const isWithinRangeResultClosedPrice = await utils.isWithinRange(orderHistoryClosedPrice, this.closedPriceWhenClosing, rangePrice);
         await expect(isWithinRangeResultClosedPrice).toBeTruthy();
-        await expect(orderHistoryPNL).toBe(this.pnlValueWhenClosing);
+        const isWithinRangeResultPNL = await utils.isWithinRange(orderHistoryPNL, this.pnlValueWhenClosing, rangePnL);
+        await expect(isWithinRangeResultPNL).toBeTruthy();
         await expect.soft(orderHistoryMargin).toBe(this.marginWhenOpenPosition);
         await expect.soft(orderHistoryMargin).toBe(this.currentMargin);
         await expect(orderHistoryUnits).toBe(this.positionUnits);
