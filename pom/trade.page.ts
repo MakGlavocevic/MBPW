@@ -159,9 +159,7 @@ export class TradePage {
         await expect(this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE).toBeVisible();
         await expect(this.OK_BUTTON).toBeVisible();
         await this.OK_BUTTON.click();
-        await this.page.waitForTimeout(2000);
-
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(4000);
         this.balanceAfterClosedPosition = await this.currentYouHaveBalance();
     
     }
@@ -182,7 +180,7 @@ export class TradePage {
         await expect(this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE).toBeVisible();
         await expect(this.OK_BUTTON).toBeVisible();
         await this.OK_BUTTON.click();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
     
     }
 
@@ -196,7 +194,7 @@ export class TradePage {
 
             notificationButtonVisible = await this.page.isVisible(this.tablePositionCloseButtonString);
 }
-        await this.page.waitForTimeout(5000);
+        await this.page.waitForTimeout(4000);
     }
 
 

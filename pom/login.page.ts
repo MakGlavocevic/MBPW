@@ -19,8 +19,8 @@ export class LoginPage {
     readonly WALLET_BACKGROUND: Locator;
     readonly INVALID_EMAIL_OR_PASSWORD_ERROR: Locator;
     readonly INVALID_EMAIL_OR_PASSWORD_TEXT: string;
-   
-
+    readonly OTP_INVALID_ERROR: Locator;
+    
     constructor(page: Page) {
         this.page = page;
         this.USERNAME_EDITBOX = page.locator('[name="email"]');
@@ -39,6 +39,7 @@ export class LoginPage {
         this.WALLET_BACKGROUND = page.locator('[alt="wallet-background"]');
         this.INVALID_EMAIL_OR_PASSWORD_ERROR = page.locator('[class="style_message__PKH_2 style_error__fKZrk"]');
         this.INVALID_EMAIL_OR_PASSWORD_TEXT = 'Invalid email or password. Please try again.';
+        this.OTP_INVALID_ERROR = page.locator('[class="style_message__PKH_2 style_error__fKZrk"]');
     }
 
     async navigateToLoginPage(): Promise<void> {
@@ -108,6 +109,26 @@ export class LoginPage {
 
         await this.LOGIN_SUBMIT_BUTTON.click();
 
+    }
+
+    async userEntersInvalidOTPCode(): Promise<void> {
+      
+        await this.OTP_1.fill('1');
+        await this.OTP_2.fill('1');
+        await this.OTP_3.fill('1');
+        await this.OTP_4.fill('1');
+        await this.OTP_5.fill('1');
+        await this.OTP_6.fill('1');
+
+        await this.LOGIN_SUBMIT_BUTTON.click();
+
+    }
+
+    async assertInvalidErrorOTPCodeError(): Promise<void> {
+      
+        await expect(this.OTP_INVALID_ERROR).toBeVisible();
+        await expect(this.OTP_INVALID_ERROR).toContainText('Incorrect OTP. You have')
+        
     }
 
     async userIsSignedIn(): Promise<void> {

@@ -55,3 +55,27 @@ test('User unsuccessfully signs in', { tag: ['@smoke', '@login'] }, async ({ pag
    });
 
   });
+
+  test('User enters invalid OTP code', { tag: ['@smoke', '@login'] }, async ({ page }) => {
+    const homePage = new HomePage(page);
+    const loginPage = new LoginPage(page);
+  
+    await test.step(`Navigate to the login screen`, async () => {
+      await loginPage.navigateToLoginPage();
+      await loginPage.assertThatUserIsOnLoginPage();
+    });
+  
+    await test.step(`User logs in using valid credentials but invalid otp code`, async () => {
+      await loginPage.loginWithCredentials(testConfig.username, testConfig.password);
+      await loginPage.wait15SecondsForUserToFinishCaptcha();
+      await loginPage.assertThatUserIsOnOTPPage();
+      await loginPage.userEntersInvalidOTPCode();
+     });
+  
+     await test.step(`User assert invalid otp code error`, async () => {
+      await loginPage.assertInvalidErrorOTPCodeError();
+    
+     });
+  
+  
+    });
