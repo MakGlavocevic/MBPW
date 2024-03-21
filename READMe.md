@@ -3,7 +3,7 @@
    
 2. **Clone Repository**: Clone the repository from the provided URL:
   
-   { git clone https://github.com/MakGlavocevic/MBPW.git }
+   git clone https://github.com/MakGlavocevic/MBPW.git
 
 
 ## Navigate to Folder and Install npm Packages
@@ -16,7 +16,7 @@ Navigate to the cloned repository folder and install the required npm packages b
 
 For the first time installation, run the following command to download the required browsers:
    
-   {npx playwright install}
+   npx playwright install
 
 
 This command will download the necessary browsers for your testing environment.
