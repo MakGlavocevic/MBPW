@@ -3,13 +3,13 @@
    
 2. **Clone Repository**: Clone the repository from the provided URL:
   
-   {git clone https://github.com/MakGlavocevic/MBPW.git}
+   { git clone https://github.com/MakGlavocevic/MBPW.git }
 
 
 ## Navigate to Folder and Install npm Packages
 Navigate to the cloned repository folder and install the required npm packages by running the following command:
 
-    {npm install}
+    npm install
 
     
 ## First Time Installation - Download Required Browsers
