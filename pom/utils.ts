@@ -3,8 +3,11 @@ import { Page, BrowserContext, Locator, expect } from '@playwright/test';
 export class Utils {
     readonly page: Page;
     readonly context: BrowserContext;
- 
+    readonly LEVERAGE_500: number;
+    readonly EUR_USD_LINK: string;
     constructor(page: Page) {
+        this.LEVERAGE_500 = 500;
+        this.EUR_USD_LINK = '/trade/EURUSD';
      }
 
      async isWeekend(): Promise<boolean> {

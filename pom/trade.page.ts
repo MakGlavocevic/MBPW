@@ -128,7 +128,7 @@ export class TradePage {
     }
 
     async navigateToTradePage(): Promise<void> {
-
+        const utils = new Utils(this.page);
         await expect(this.TRADE_DROPDOWN_BUTTON).toBeVisible();
         await this.TRADE_DROPDOWN_BUTTON.click();
         await this.page.waitForTimeout(500);
@@ -137,7 +137,7 @@ export class TradePage {
         await this.page.waitForTimeout(500);
         await this.page. reload()
         await this.page.waitForLoadState('domcontentloaded')
-        await expect(this.page.url()).toContain('/trade/EURUSD');
+        await expect(this.page.url()).toContain(utils.EUR_USD_LINK);
         await this.page.waitForTimeout(2000);
     }
 
@@ -267,7 +267,7 @@ export class TradePage {
 
         await this.page.waitForTimeout(1000);
         this.initialMargin = await this.currentInitialMargin();
-        await this.assertInitialMarginCalculation(500)
+        await this.assertInitialMarginCalculation(utils.LEVERAGE_500)
 
         switch (positionSide) {
 
