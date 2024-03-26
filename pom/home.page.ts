@@ -30,7 +30,6 @@ export class HomePage {
           });
           console.log('User is on homepage');
                
-
     }
 
     async selectHedgingTradeAccount(): Promise<void> {

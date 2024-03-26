@@ -496,7 +496,7 @@ export class TradePage {
         const positionUnits = await this.TABLE_POSITION_UNITS.textContent();
  
         if (positionUnits !== null) {
-         console.log('Current table pnl: ' + positionUnits);
+         console.log('Current table units: ' + positionUnits);
          const positionUnitsFormated = positionUnits?.replace(",", "")
          const positionUnitsFormated2 = positionUnitsFormated?.replace("EUR", "")
          const positionUnitsFormated3 = positionUnitsFormated2?.replace("USD", "")
