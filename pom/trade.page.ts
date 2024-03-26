@@ -159,9 +159,7 @@ export class TradePage {
         await expect(this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE).toBeVisible();
         await expect(this.OK_BUTTON).toBeVisible();
         await this.OK_BUTTON.click();
-        await this.page.waitForTimeout(2000);
-
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(4000);
         this.balanceAfterClosedPosition = await this.currentYouHaveBalance();
     
     }
@@ -182,7 +180,7 @@ export class TradePage {
         await expect(this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE).toBeVisible();
         await expect(this.OK_BUTTON).toBeVisible();
         await this.OK_BUTTON.click();
-        await this.page.waitForTimeout(1000);
+        await this.page.waitForTimeout(500);
     
     }
 
@@ -196,7 +194,7 @@ export class TradePage {
 
             notificationButtonVisible = await this.page.isVisible(this.tablePositionCloseButtonString);
 }
-        await this.page.waitForTimeout(5000);
+        await this.page.waitForTimeout(4000);
     }
 
 
@@ -229,10 +227,7 @@ export class TradePage {
         switch (positionSizeType) {
 
             case 'Value':
-                await expect(this.POSITION_SIZE_DROPDOWN_ARROW).toBeVisible();
-                await this.POSITION_SIZE_DROPDOWN_ARROW.click();
-                await expect(this.POSITION_SIZE_DROPDOWN_VALUE).toBeVisible();
-                await this.POSITION_SIZE_DROPDOWN_VALUE.click();
+                await this.selectValuePosition();
                 await this.page.waitForTimeout(500);
                 await this.POSITION_VALUE_INPUT.fill(positionValue);
                 await this.page.waitForTimeout(500);
@@ -243,16 +238,11 @@ export class TradePage {
                 break;
 
             case 'Lot':
-                await expect(this.POSITION_SIZE_DROPDOWN_ARROW).toBeVisible();
-                await this.POSITION_SIZE_DROPDOWN_ARROW.click();
-                await expect(this.POSITION_SIZE_DROPDOWN_LOT).toBeVisible();
-                await this.POSITION_SIZE_DROPDOWN_LOT.click();
-                await this.page.waitForTimeout(1000);
+                await this.selectLotPosition();
+                await this.page.waitForTimeout(500);
                 await this.POSITION_LOT_INPUT.fill(positionValue);
-                await expect(this.POSITION_SIZE_DROPDOWN_ARROW).toBeVisible();
-                await this.POSITION_SIZE_DROPDOWN_ARROW.click();
-                await expect(this.POSITION_SIZE_DROPDOWN_VALUE).toBeVisible();
-                await this.POSITION_SIZE_DROPDOWN_VALUE.click();
+                await this.page.waitForTimeout(500);
+                await this.selectValuePosition();
                 await this.page.waitForTimeout(500);
                 await this.MARGIN_ACCOUNT_METRICS.click();
                 await this.page.waitForTimeout(1000);
@@ -366,6 +356,24 @@ export class TradePage {
         } catch (error) {
             throw new Error('Margin is not the equal value in position table and account metrics');
         }
+     }
+
+     async selectValuePosition(): Promise<void> {
+
+        await expect(this.POSITION_SIZE_DROPDOWN_ARROW).toBeVisible();
+        await this.POSITION_SIZE_DROPDOWN_ARROW.click();
+        await expect(this.POSITION_SIZE_DROPDOWN_VALUE).toBeVisible();
+        await this.POSITION_SIZE_DROPDOWN_VALUE.click();
+       
+     }
+
+     async selectLotPosition(): Promise<void> {
+
+        await expect(this.POSITION_SIZE_DROPDOWN_ARROW).toBeVisible();
+        await this.POSITION_SIZE_DROPDOWN_ARROW.click();
+        await expect(this.POSITION_SIZE_DROPDOWN_LOT).toBeVisible();
+        await this.POSITION_SIZE_DROPDOWN_LOT.click();
+
      }
 
      async assertInitialMargin(range: number): Promise<void> {
