@@ -44,14 +44,14 @@ export class LoginPage {
 
     async navigateToLoginPage(): Promise<void> {
 
-        await expect(this.REDIRECT_TO_LOGIN_BUTTON).toBeVisible();
+        await expect(this.REDIRECT_TO_LOGIN_BUTTON, 'User is on the login/signup page').toBeVisible();
         await this.REDIRECT_TO_LOGIN_BUTTON.click();
 
     }
 
     async assertThatUserIsOnLoginPage(): Promise<void> {
       
-        await expect(this.SIGN_IN_SCREEN_TITLE).toBeVisible();
+        await expect(this.SIGN_IN_SCREEN_TITLE, 'User is on the sign in page').toBeVisible();
    
     }
 
@@ -63,7 +63,7 @@ export class LoginPage {
         await this.USERNAME_EDITBOX.fill(username);
         await this.PASSWORD_EDITBOX.fill(password);
 
-        await expect(this.LOGIN_SUBMIT_BUTTON).toBeVisible();
+        await expect(this.LOGIN_SUBMIT_BUTTON, 'User entered credentials').toBeVisible();
         await this.LOGIN_SUBMIT_BUTTON.click();
     }
 
@@ -75,13 +75,13 @@ export class LoginPage {
         await this.USERNAME_EDITBOX.fill('username@dot.com');
         await this.PASSWORD_EDITBOX.fill('password');
 
-        await expect(this.LOGIN_SUBMIT_BUTTON).toBeVisible();
+        await expect(this.LOGIN_SUBMIT_BUTTON, 'User entered invalid credentials').toBeVisible();
         await this.LOGIN_SUBMIT_BUTTON.click();
     }
 
     async assertInvalidCredentialsError(): Promise<void> {
       
-        await expect(this.INVALID_EMAIL_OR_PASSWORD_ERROR).toBeVisible();
+        await expect(this.INVALID_EMAIL_OR_PASSWORD_ERROR, 'Error for invalid credentials is visible').toBeVisible();
         await expect(this.INVALID_EMAIL_OR_PASSWORD_ERROR).toHaveText(this.INVALID_EMAIL_OR_PASSWORD_TEXT);
     }
 
@@ -93,7 +93,7 @@ export class LoginPage {
 
     async assertThatUserIsOnOTPPage(): Promise<void> {
       
-        await expect(this.OTP_TITLE).toBeVisible();
+        await expect(this.OTP_TITLE, 'User is on the OTP screen').toBeVisible();
         await expect(this.OTP_SUBTITLE).toBeVisible();
 
     }
@@ -126,14 +126,14 @@ export class LoginPage {
 
     async assertInvalidErrorOTPCodeError(): Promise<void> {
       
-        await expect(this.OTP_INVALID_ERROR).toBeVisible();
+        await expect(this.OTP_INVALID_ERROR, "Error for invalid OTP is visible").toBeVisible();
         await expect(this.OTP_INVALID_ERROR).toContainText('Incorrect OTP. You have')
         
     }
 
     async userIsSignedIn(): Promise<void> {
       
-        await expect(this.WALLET_BACKGROUND).toBeVisible();
+        await expect(this.WALLET_BACKGROUND, 'User is signed in').toBeVisible();
 
     }
 
