@@ -34,16 +34,16 @@ export class HomePage {
 
     async selectHedgingTradeAccount(): Promise<void> {
 
-        await expect(this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON).toBeVisible();
+        await expect(this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON, 'User opened trading account dropdown').toBeVisible();
         await this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON.click();
 
-        await expect(this.HEDGING_TRADING_ACCOUNT).toBeVisible();
+        await expect(this.HEDGING_TRADING_ACCOUNT, 'User sees Hedging account').toBeVisible();
         await this.HEDGING_TRADING_ACCOUNT.click();
-        console.log('User selected hedging account');
+        console.log('User selected Hedging account');
 
         await this.page.waitForTimeout(1000);
 
-        await expect(this.HEDGING_TRADING_ACCOUNT).toBeVisible();
+        await expect(this.HEDGING_TRADING_ACCOUNT, 'Hedging account is selected').toBeVisible();
       
     }
 
@@ -61,7 +61,7 @@ export class HomePage {
 
     async assertThatUserNotSignedIn(): Promise<void> {
       
-        await expect(this.WALLET_BACKGROUND).not.toBeVisible();
+        await expect(this.WALLET_BACKGROUND, 'User is not signed in').not.toBeVisible();
 
     }
 
