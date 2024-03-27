@@ -647,7 +647,7 @@ export class TradePage {
      }
 
      async balanceAccountMetrics(): Promise<number> {
-
+        await expect(this.BALANCE_ACCOUNT_METRICS, 'Account metrics balance is visible').toBeVisible();
         const currentPrice = await this.BALANCE_ACCOUNT_METRICS.textContent();
 
         if (currentPrice !== null) {
@@ -661,7 +661,7 @@ export class TradePage {
      }
 
      async equityAccountMetrics(): Promise<number> {
-
+        await expect(this.EQUITY_ACCOUNT_METRICS, 'Account metrics equity is visible').toBeVisible();
         const currentPrice = await this.EQUITY_ACCOUNT_METRICS.textContent();
 
         if (currentPrice !== null) {
@@ -675,7 +675,7 @@ export class TradePage {
      }
 
      async freeMarginAccountMetrics(): Promise<number> {
-
+        await expect(this.FREE_MARGIN_ACCOUNT_METRICS, 'Account metrics free margin is visible').toBeVisible();
         const currentPrice = await this.FREE_MARGIN_ACCOUNT_METRICS.textContent();
 
         if (currentPrice !== null) {
@@ -689,7 +689,7 @@ export class TradePage {
      }
 
      async orderHistoryTablePNL(): Promise<number> {
-
+        await expect(this.ORDER_HISTORY_PNL, 'Order history PNL is visible').toBeVisible();
         const orderHistoryPNL = await this.ORDER_HISTORY_PNL.textContent();
 
         if (orderHistoryPNL !== null) {
@@ -703,7 +703,7 @@ export class TradePage {
      }
 
      async orderHistoryTableUnits(): Promise<number> {
-
+        await expect(this.ORDER_HISTORY_UNITS, 'Order history units is visible').toBeVisible();
         const orderHistoryUnits = await this.ORDER_HISTORY_UNITS.textContent();
 
         if (orderHistoryUnits !== null) {
@@ -719,7 +719,7 @@ export class TradePage {
      }
 
      async orderHistoryTableMargin(): Promise<number> {
-
+        await expect(this.ORDER_HISTORY_MARGIN, 'Order history margin is visible').toBeVisible();
         const orderHistoryMargin = await this.ORDER_HISTORY_MARGIN.textContent();
 
         if (orderHistoryMargin !== null) {
@@ -735,7 +735,7 @@ export class TradePage {
      }
 
      async orderHistoryTableClosedPrice(): Promise<number> {
-
+        await expect(this.ORDER_HISTORY_CLOSED_PRICE, 'Order history closed price is visible').toBeVisible();
         const orderHistoryClosedPrice = await this.ORDER_HISTORY_CLOSED_PRICE.textContent();
 
         if (orderHistoryClosedPrice !== null) {
@@ -758,8 +758,8 @@ export class TradePage {
         equity =  await this.equityAccountMetrics();
         freeMargin =  await this.freeMarginAccountMetrics();
        
-        await expect(balance).toBe(equity);
-        await expect(balance).toBe(freeMargin);
+        await expect(balance, 'Balance is the same as equtiy when all positions are closed').toBe(equity);
+        await expect(balance, 'Balance is the same as free margin when all positions are closed').toBe(freeMargin);
      }
 
      async assertInitialMarginCalculation(leverage: number): Promise<void> {
@@ -787,6 +787,8 @@ export class TradePage {
         orderHistoryMargin = await this.orderHistoryTableMargin();
         orderHistoryUnits = await this.orderHistoryTableUnits();
 
+        await expect(this.ORDER_HISTORY_SIDE).toBeVisible();
+
         switch (positionSide) {
 
             case 'BUY':
@@ -803,12 +805,15 @@ export class TradePage {
         }
 
         const isWithinRangeResultClosedPrice = await utils.isWithinRange(orderHistoryClosedPrice, this.closedPriceWhenClosing, rangePrice);
-        await expect(isWithinRangeResultClosedPrice).toBeTruthy();
+        await expect(isWithinRangeResultClosedPrice,
+            'Order history Closed price and Position close modal Closed price are in the expected range')
+            .toBeTruthy();
         const isWithinRangeResultPNL = await utils.isWithinRange(orderHistoryPNL, this.pnlValueWhenClosing, rangePnL);
-        await expect(isWithinRangeResultPNL).toBeTruthy();
-        await expect.soft(orderHistoryMargin).toBe(this.marginWhenOpenPosition);
-        await expect.soft(orderHistoryMargin).toBe(this.currentMargin);
-        await expect(orderHistoryUnits).toBe(this.positionUnits);
+        await expect(isWithinRangeResultPNL,
+            'Order history PNL and Position close modal PNL are in the expected range').toBeTruthy();
+        await expect(orderHistoryMargin, 'Order history margin matches the open position margin').toBe(this.marginWhenOpenPosition);
+        await expect(0, 'Account margin should not have any margin left after closing position').toBe(this.currentMargin);
+        await expect(orderHistoryUnits, 'Position units are the same when the position is closed and opened').toBe(this.positionUnits);
 
      }
 
@@ -816,7 +821,7 @@ export class TradePage {
 
         await expect(this.ORDER_HISTORY_TAB).toBeVisible();
         await this.ORDER_HISTORY_TAB.click();
-        await expect(this.CLOSED_PRICE_COLUMN_LABEL).toBeVisible();
+        await expect(this.CLOSED_PRICE_COLUMN_LABEL, 'User is on the order history tab').toBeVisible();
 
      }
 }
