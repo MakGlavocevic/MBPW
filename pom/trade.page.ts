@@ -198,7 +198,7 @@ export class TradePage {
     }
 
 
-    async openEURUSDPosition(positionSide: string, positionSizeType: string, positionValue: string): Promise<void> {
+    async openMarketPosition(positionSide: string, positionSizeType: string, positionValue: string): Promise<void> {
         const utils = new Utils(this.page);
         this.positionSideType = positionSide;
 
