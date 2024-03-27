@@ -296,12 +296,13 @@ export class TradePage {
         }
 
         try {
-            console.log('Balance before opened position: ' + this.balanceBeforeOpenPosition);
             console.log('Balance after opened position: ' + balanceOpenPositionCalculation);
             const isWithinRangeResult = await utils.isWithinRange(this.balanceBeforeOpenPosition, balanceOpenPositionCalculation, 1);
-            await expect(isWithinRangeResult).toBeTruthy();
+            await expect(isWithinRangeResult,
+                'You have balance before opening position is in the expected range with the calculation = balanceafter + margin +/- pnl')
+                .toBeTruthy();
         } catch (error) {
-            throw new Error('Balance before open position calculation is incorrect');
+            throw new Error('Balance before/after open position calculation is incorrect');
         }
 
         await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
@@ -318,11 +319,12 @@ export class TradePage {
                 const entryBuyPrice = await this.entryPriceTable();
                 try {
                     console.log('Buy price when trade was opened: ' + this.buyPriceWhenTradeWasOpened);
-                    console.log('Entry buy price in the position table: ' + entryBuyPrice);
                     const isWithinRangeResult = await utils.isWithinRange(this.buyPriceWhenTradeWasOpened, entryBuyPrice, range);
-                    await expect(isWithinRangeResult).toBeTruthy();
+                    await expect(isWithinRangeResult,
+                    'Entry price is in the expected range with the Buy price when the trade was opened')
+                    .toBeTruthy();
                 } catch (error) {
-                    throw new Error('buy price at the moment of open position does not match the entry price of position in the table');
+                    throw new Error('Buy price at the moment of open position does not match the entry price of position in the table');
                 }
                 break;
 
@@ -330,11 +332,12 @@ export class TradePage {
                 const entrySellPrice = await this.entryPriceTable();
                 try {
                     console.log('Sell price when trade was opened: ' + this.sellPriceWhenTradeWasOpened);
-                    console.log('Entry Sell price in the position table: ' + entrySellPrice);
                     const isWithinRangeResult = await utils.isWithinRange(this.sellPriceWhenTradeWasOpened, entrySellPrice, range);
-                    await expect(isWithinRangeResult).toBeTruthy();
+                    await expect(isWithinRangeResult, 
+                        'Entry price is in the expected range with the Sell price when the trade was opened')
+                        .toBeTruthy();
                 } catch (error) {
-                    throw new Error('sell price at the moment of open position does not match the entry price of position in the table');
+                    throw new Error('Sell price at the moment of open position does not match the entry price of position in the table');
                 }
                 break;
                 
@@ -350,9 +353,9 @@ export class TradePage {
         this.currentMargin = await this.marginAccountMetrics();
 
         try {
-            console.log('Position table margin: ' + this.marginWhenOpenPosition);
-            console.log('Account Metrics Margin: ' + this.currentMargin);
-            await expect.soft(this.marginWhenOpenPosition).toBe(this.currentMargin);
+            await expect.soft(this.marginWhenOpenPosition, 
+                'Margin of the open position is same as account metrics margin')
+                .toBe(this.currentMargin);
         } catch (error) {
             throw new Error('Margin is not the equal value in position table and account metrics');
         }
@@ -382,15 +385,16 @@ export class TradePage {
         this.currentMargin = await this.marginAccountMetrics();
 
         try {
-            console.log('Position table margin: ' + this.marginWhenOpenPosition);
-            console.log('Account Metrics Margin: ' + this.currentMargin);
-            console.log('Initial Margin: ' + this.initialMargin);
             const isWithinRangeResult = await utils.isWithinRange(this.marginWhenOpenPosition, this.initialMargin, range);
-            await expect.soft(isWithinRangeResult).toBeTruthy();
+            await expect.soft(isWithinRangeResult, 
+                'Initial margin is in the expected range with the position opened margin')
+                .toBeTruthy();
             const isWithinRangeResult2 = await utils.isWithinRange(this.currentMargin, this.initialMargin, range);
-            await expect.soft(isWithinRangeResult2).toBeTruthy();
+            await expect.soft(isWithinRangeResult2,
+                'Initial margin is in the expected range with the account metrics margin')
+                .toBeTruthy();
         } catch (error) {
-            throw new Error('Margin is not the equal value in position table and account metrics');
+            throw new Error('Margin is not equal value for initial margin, account metrics margin and position margin');
         }
      }
 
@@ -405,12 +409,12 @@ export class TradePage {
                 const currentTableBuyPrice = await this.currentPriceTable();
                 const currentNewSellPrice = await this.currentSellPrice();
                 try {
-                    console.log('Position table current price: ' + currentTableBuyPrice);
-                    console.log('Current sell price: ' + currentNewSellPrice);
                     const isWithinRangeResult = await utils.isWithinRange(currentTableBuyPrice, currentNewSellPrice, range);
-                    await expect(isWithinRangeResult).toBeTruthy();
+                    await expect(isWithinRangeResult, 
+                        'Sell price matches the expected range of the current price of buy side position in the table')
+                        .toBeTruthy();
                 } catch (error) {
-                    throw new Error('sell price at the current moment does not match the current price of buy side position in the table');
+                    throw new Error('Sell price at the current moment does not match the current price of buy side position in the table');
                 }
                 break;
 
@@ -418,12 +422,12 @@ export class TradePage {
                 const currentTableSellPrice = await this.currentPriceTable();
                 const currentNewBuyPrice = await this.currentBuyPrice();
                 try {
-                    console.log('Position table current price: ' + currentTableSellPrice);
-                    console.log('Current buy price: ' + currentNewBuyPrice);
                     const isWithinRangeResult = await utils.isWithinRange(currentTableSellPrice, currentNewBuyPrice, range);
-                    await expect(isWithinRangeResult).toBeTruthy();
+                    await expect(isWithinRangeResult,
+                        'Buy price matches the expected range of the current price of sell side position in the table')
+                        .toBeTruthy();
                 } catch (error) {
-                    throw new Error('buy price at the current moment does not match the current price of sell side position in the table');
+                    throw new Error('Buy price at the current moment does not match the current price of sell side position in the table');
                 }
                 break;
                 
@@ -435,7 +439,7 @@ export class TradePage {
  
 
     async currentYouHaveBalance(): Promise<number> {
-
+       await expect(this.BALANCE, 'Users you have balance is visible').toBeVisible();
        const balanceText = await this.BALANCE.textContent();
 
        if (balanceText !== null) {
@@ -449,7 +453,7 @@ export class TradePage {
     }
 
     async marginAccountMetrics(): Promise<number> {
-
+        await expect(this.MARGIN_ACCOUNT_METRICS, 'Account metrics margin is visible').toBeVisible();
         const marginText = await this.MARGIN_ACCOUNT_METRICS.textContent();
  
         if (marginText !== null) {
@@ -463,7 +467,7 @@ export class TradePage {
      }
 
      async currentTableMargin(): Promise<number> {
-
+        await expect(this.MARGIN_POSITION_TABLE, 'Table positions margin is visible').toBeVisible();
         const marginText = await this.MARGIN_POSITION_TABLE.textContent();
  
         if (marginText !== null) {
@@ -478,7 +482,7 @@ export class TradePage {
 
 
      async currentPNL(): Promise<number> {
-
+        await expect(this.PNL_FIRST_TRADE, 'Current table position pnl is visible').toBeVisible();
         const pnlText = await this.PNL_FIRST_TRADE.textContent();
  
         if (pnlText !== null) {
@@ -492,7 +496,7 @@ export class TradePage {
      }
      
      async openPositionUnits(): Promise<number> {
-
+        await expect(this.TABLE_POSITION_UNITS, 'Current table position units is visible').toBeVisible();
         const positionUnits = await this.TABLE_POSITION_UNITS.textContent();
  
         if (positionUnits !== null) {
@@ -508,7 +512,7 @@ export class TradePage {
      }
 
      async closedPositionPNL(): Promise<number> {
-
+        await expect(this.CLOSED_PNL, 'Close modal position pnl is visible').toBeVisible();
         const pnlText = await this.CLOSED_PNL.textContent();
  
         if (pnlText !== null) {
@@ -522,7 +526,8 @@ export class TradePage {
      }
 
      async currentBuyPrice(): Promise<number> {
-
+        await expect(this.BUY_PRICE, 'Buy price is visible').toBeVisible();
+        await expect(this.BUY_PRICE_LAST_NUMBER, 'Buy price last number is visible').toBeVisible();
         const buyPrice = await this.BUY_PRICE.textContent();
         const buyPriceLastNumber = await this.BUY_PRICE_LAST_NUMBER.textContent();
 
@@ -539,7 +544,8 @@ export class TradePage {
      }
 
      async currentSellPrice(): Promise<number> {
-
+        await expect(this.SELL_PRICE, 'Sell price is visible').toBeVisible();
+        await expect(this.SELL_PRICE_LAST_NUMBER, 'Sell price last number is visible').toBeVisible();
         const sellPrice = await this.SELL_PRICE.textContent();
         const sellPriceLastNumber = await this.SELL_PRICE_LAST_NUMBER.textContent();
 
@@ -556,7 +562,7 @@ export class TradePage {
      }
 
      async entryPriceTable(): Promise<number> {
-
+        await expect(this.ENTRY_PRICE_TABLE, 'Table entry price is visible').toBeVisible();
         const entryPrice = await this.ENTRY_PRICE_TABLE.textContent();
 
         if (entryPrice !== null) {
@@ -570,7 +576,7 @@ export class TradePage {
      }
 
      async currentPriceTable(): Promise<number> {
-
+        await expect(this.CURRENT_PRICE_TABLE, 'Table current price is visible').toBeVisible();
         const currentPrice = await this.CURRENT_PRICE_TABLE.textContent();
 
         if (currentPrice !== null) {
@@ -584,7 +590,7 @@ export class TradePage {
      }
 
      async currentInitialMargin(): Promise<number> {
-
+        await expect(this.INITIAL_MARGIN, 'Initial margin is visible').toBeVisible();
         const currentInitialMargin = await this.INITIAL_MARGIN.textContent();
 
         if (currentInitialMargin !== null) {
@@ -598,7 +604,7 @@ export class TradePage {
      }
 
      async currentPositionValue(): Promise<number> {
-
+        await expect(this.POSITION_VALUE_INPUT, 'Current position value is visible').toBeVisible();
         const currentPositionValue = await this.POSITION_VALUE_INPUT.inputValue();
 
         if (currentPositionValue !== null) {
@@ -613,15 +619,15 @@ export class TradePage {
 
      async assertThereIsNoCommisionAndSwap(): Promise<void> {
 
-        await expect(await this.SWAP_POSITION_TABLE.textContent()).toMatch('0 EUR' || '0 USD');
-        await expect(await this.COMMISION_POSITION_TABLE.textContent()).toMatch('0 EUR' || '0 USD');
+        await expect(await this.SWAP_POSITION_TABLE.textContent(), 'Swap is zero').toMatch('0 EUR' || '0 USD');
+        await expect(await this.COMMISION_POSITION_TABLE.textContent(), 'Commision is zero').toMatch('0 EUR' || '0 USD');
        
      }
 
      async assertThereIsNoTPSL(): Promise<void> {
 
-        await expect(this.TP_POSITION_TABLE).toHaveText('0');
-        await expect(this.SL_POSITION_TABLE).toHaveText('0');
+        await expect(this.TP_POSITION_TABLE, 'Take profit is not set').toHaveText('0');
+        await expect(this.SL_POSITION_TABLE, 'Stop loss is not set').toHaveText('0');
        
      }
 
