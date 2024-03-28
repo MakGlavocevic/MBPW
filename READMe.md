@@ -24,3 +24,9 @@ This command will download the necessary browsers for your testing environment.
 Feel free to adjust the commands according to your needs.
 
 Feel free to integrate this into your Markdown file or documentation.
+
+## Test run command and additional requirements
+In order to run these test you will need to create a testConfig.ts class and add 3 variables (username, passowrd and qa_main), after that you can run the test using the following command
+    ```
+    npx playwright test --grep @tag --headed
+    ```
