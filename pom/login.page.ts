@@ -107,6 +107,7 @@ export class LoginPage {
         await this.OTP_5.fill('5');
         await this.OTP_6.fill('6');
 
+        await expect(this.LOGIN_SUBMIT_BUTTON, 'User sees login button').toBeVisible();
         await this.LOGIN_SUBMIT_BUTTON.click();
 
     }
@@ -120,6 +121,7 @@ export class LoginPage {
         await this.OTP_5.fill('1');
         await this.OTP_6.fill('2');
 
+        await expect(this.LOGIN_SUBMIT_BUTTON, 'User sees login button').toBeVisible();
         await this.LOGIN_SUBMIT_BUTTON.click();
 
     }
