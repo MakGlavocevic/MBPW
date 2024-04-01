@@ -8,11 +8,11 @@ test.beforeEach(async ({ page }) => {
   await homePage.navigateToHomePage();
 });
 
-test('User successfully signs in and logs out', { tag: ['@smoke', '@login'] }, async ({ page }) => {
+test('User successfully signs in and logs out', { tag: ['@testcicd', '@test'] }, async ({ page }) => {
   const homePage = new HomePage(page);
   const loginPage = new LoginPage(page);
 
-  await test.step(`Navigate to the login screen`, async () => {
+  await test.step(`Navigate to the login screen and assert it`, async () => {
     await loginPage.navigateToLoginPage();
     await loginPage.assertThatUserIsOnLoginPage();
   });
