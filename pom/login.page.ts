@@ -114,11 +114,11 @@ export class LoginPage {
     async userEntersInvalidOTPCode(): Promise<void> {
       
         await this.OTP_1.fill('1');
-        await this.OTP_2.fill('1');
+        await this.OTP_2.fill('3');
         await this.OTP_3.fill('1');
-        await this.OTP_4.fill('1');
+        await this.OTP_4.fill('3');
         await this.OTP_5.fill('1');
-        await this.OTP_6.fill('1');
+        await this.OTP_6.fill('3');
 
         await this.LOGIN_SUBMIT_BUTTON.click();
 
