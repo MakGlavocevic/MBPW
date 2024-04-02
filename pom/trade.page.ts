@@ -786,6 +786,7 @@ export class TradePage {
         orderHistoryClosedPrice = await this.orderHistoryTableClosedPrice();
         orderHistoryMargin = await this.orderHistoryTableMargin();
         orderHistoryUnits = await this.orderHistoryTableUnits();
+        this.currentMargin = await this.marginAccountMetrics();
 
         await expect(this.ORDER_HISTORY_SIDE).toBeVisible();
 
