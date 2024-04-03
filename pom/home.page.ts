@@ -31,7 +31,11 @@ export class HomePage {
             height: 1080,
           });
           this.url = this.page.url();
-          console.log('User is on homepage of ' + this.url);
+          if (this.url.includes('trade-dev')) {
+            console.log('User is on a page containing "trade-dev" in the URL');
+        } else if (this.url.includes('trade-main')) {
+            console.log('User is on a page that does not contain "trade-main" in the URL');
+        }
                
     }
 
