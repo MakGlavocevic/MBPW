@@ -30,7 +30,7 @@ jobs:
         echo "QA_MAIN=$QA_MAIN" >> $GITHUB_ENV  # Exporting the secret as an environment variable
 
     - name: Run Playwright tests
-      run: npx playwright test --grep @testcicd --headed
+      run: npx playwright test --grep @testcicd
 
     - uses: actions/upload-artifact@v4
       if: always()
