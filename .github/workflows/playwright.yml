@@ -42,6 +42,8 @@ jobs:
           echo "QA_ENV=${QA_MAIN}" >> $GITHUB_ENV
         elif [ "${{ github.event.inputs.environment }}" = "DEV" ]; then
           echo "QA_ENV=${QA_DEV}" >> $GITHUB_ENV
+        elif [ "${{ github.event.inputs.environment }}" = "" ]; then
+          echo "QA_ENV=${QA_MAIN}" >> $GITHUB_ENV
         else
           echo "Invalid environment specified."
           exit 1
