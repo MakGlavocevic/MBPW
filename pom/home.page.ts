@@ -34,7 +34,7 @@ export class HomePage {
           if (this.url.includes('trade-dev')) {
             console.log('User is on a page containing "trade-dev" in the URL');
         } else if (this.url.includes('trade-main')) {
-            console.log('User is on a page that does not contain "trade-main" in the URL');
+            console.log('User is on a page containing "trade-main" in the URL');
         }
                
     }
