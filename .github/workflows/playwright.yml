@@ -11,6 +11,10 @@ on:
         description: 'Input Test Tag that you would like to run'
         required: true
         default: 'smoke'
+      environment:
+        description: 'Environment to run tests, DEV or MAIN'
+        required: true
+        default: 'MAIN'
 
 jobs:
   test:
@@ -32,8 +36,16 @@ jobs:
     - name: Set up Environment
       env:
         QA_MAIN: ${{ secrets.QA_MAIN }}  # Accessing the secret
+        QA_DEV: ${{ secrets.QA_DEV }}  # Accessing the secret
       run: |
-        echo "QA_MAIN=$QA_MAIN" >> $GITHUB_ENV  # Exporting the secret as an environment variable
+        if [ "${{ github.event.inputs.environment }}" = "MAIN" ]; then
+          echo "QA_ENV=${QA_MAIN}" >> $GITHUB_ENV
+        elif [ "${{ github.event.inputs.environment }}" = "DEV" ]; then
+          echo "QA_ENV=${QA_DEV}" >> $GITHUB_ENV
+        else
+          echo "Invalid environment specified."
+          exit 1
+        fi
 
     - name: Run Playwright tests
       run: |

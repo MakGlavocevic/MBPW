@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config(); // Load environment variables from .env file
 
 const testConfig = {
-  qa_main: process.env.QA_MAIN
+  qa_main: process.env.QA_ENV
 };
 
 /**
