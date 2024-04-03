@@ -25,13 +25,12 @@ export class HomePage {
 
     async navigateToHomePage(): Promise<void> {
 
-        this.url = this.page.url();
-
         await this.page.goto("");
         await this.page.setViewportSize({
             width: 1920,
             height: 1080,
           });
+          this.url = this.page.url();
           console.log('User is on homepage of ' + this.url);
                
     }
