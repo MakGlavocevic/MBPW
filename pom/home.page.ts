@@ -21,14 +21,19 @@ export class HomePage {
         this.SUPPORT_WINDOW = '[name="chat-widget"]';
     }
 
+
     async navigateToHomePage(): Promise<void> {
+
+        const testConfig = {
+            qa_main: process.env.QA_ENV
+          };
 
         await this.page.goto("");
         await this.page.setViewportSize({
             width: 1920,
             height: 1080,
           });
-          console.log('User is on homepage');
+          console.log('User is on homepage of ' + testConfig.qa_main);
                
     }
 
