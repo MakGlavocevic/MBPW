@@ -27,7 +27,7 @@ Feel free to adjust the commands according to your needs.
 Feel free to integrate this into your Markdown file or documentation.
 
 ## Test run command and additional requirements
-In order to run these test you will need to create a testConfig.ts class and add 3 variables (username, password and qa_main), after that you can run the test using the following command
+In order to run these test you will need to create a testConfig.env file and add 3 secrets (USERNAME, PASSWORD and QA_MAIN), after that you can run the test using the following command
 
    ```
    npx playwright test --grep @tag --headed
