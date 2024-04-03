@@ -10,6 +10,7 @@ export class HomePage {
     readonly LOG_OUT_BUTTON: Locator;
     readonly SUPPORT_WINDOW_MINIMIZE: Locator;
     readonly SUPPORT_WINDOW: string;
+    url: string;
     constructor(page: Page) {
         this.page = page;
         this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON = page.locator('[alt="user-icon"]');
@@ -24,16 +25,14 @@ export class HomePage {
 
     async navigateToHomePage(): Promise<void> {
 
-        const testConfig = {
-            qa_main: process.env.QA_ENV
-          };
+        this.url = this.page.url();
 
         await this.page.goto("");
         await this.page.setViewportSize({
             width: 1920,
             height: 1080,
           });
-          console.log('User is on homepage of ' + testConfig.qa_main);
+          console.log('User is on homepage of ' + this.url);
                
     }
 
