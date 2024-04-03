@@ -19,6 +19,7 @@ test('User successfully signs in and logs out', { tag: ['@smoke', '@login', '@va
   });
 
   await test.step(`User logs in using valid credentials`, async () => {
+
     const username = process.env.USERNAME;
     const password = process.env.PASSWORD;
     if (username && password) {
@@ -26,6 +27,7 @@ test('User successfully signs in and logs out', { tag: ['@smoke', '@login', '@va
     } else {
       throw new Error('Username or password not defined in environment variables.');
     }
+
     await loginPage.wait15SecondsForUserToFinishCaptcha();
     await loginPage.assertThatUserIsOnOTPPage();
     await loginPage.userEntersOTPCode();
