@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
+    inputs:
+      test_tags:
+        description: 'Input Test Tag that you would like to run'
+        required: true
+        default: 'smoke'
 
 jobs:
   test:
