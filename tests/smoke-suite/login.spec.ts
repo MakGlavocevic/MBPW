@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pom/login.page';
 import { HomePage } from '../../pom/home.page';
-import { testConfig } from '../../testConfig';
 
+require('dotenv').config();
 test.beforeEach(async ({ page }) => {
   console.log('Test Start');
   const homePage = new HomePage(page);
@@ -19,7 +19,13 @@ test('User successfully signs in and logs out', { tag: ['@smoke', '@login', '@va
   });
 
   await test.step(`User logs in using valid credentials`, async () => {
-    await loginPage.loginWithCredentials(testConfig.username, testConfig.password);
+    const username = process.env.USERNAME;
+    const password = process.env.PASSWORD;
+    if (username && password) {
+      await loginPage.loginWithCredentials(username, password);
+    } else {
+      throw new Error('Username or password not defined in environment variables.');
+    }
     await loginPage.wait15SecondsForUserToFinishCaptcha();
     await loginPage.assertThatUserIsOnOTPPage();
     await loginPage.userEntersOTPCode();
@@ -66,10 +72,16 @@ test('User unsuccessfully signs in', { tag: ['@smoke', '@login', '@invalidlogin'
     });
   
     await test.step(`User logs in using valid credentials but invalid otp code`, async () => {
-      await loginPage.loginWithCredentials(testConfig.username, testConfig.password);
-      await loginPage.wait15SecondsForUserToFinishCaptcha();
-      await loginPage.assertThatUserIsOnOTPPage();
-      await loginPage.userEntersInvalidOTPCode();
+    const username = process.env.USERNAME;
+    const password = process.env.PASSWORD;
+    if (username && password) {
+      await loginPage.loginWithCredentials(username, password);
+    } else {
+      throw new Error('Username or password not defined in environment variables.');
+    }
+    await loginPage.wait15SecondsForUserToFinishCaptcha();
+    await loginPage.assertThatUserIsOnOTPPage();
+    await loginPage.userEntersOTPCode();
      });
   
      await test.step(`User assert invalid otp code error`, async () => {

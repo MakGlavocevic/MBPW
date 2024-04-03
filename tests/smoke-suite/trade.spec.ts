@@ -2,9 +2,9 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pom/login.page';
 import { HomePage } from '../../pom/home.page';
 import { TradePage } from '../../pom/trade.page';
-import { testConfig } from '../../testConfig';
 import { Utils } from '../../pom/utils';
 
+require('dotenv').config();
 test.beforeEach(async ({ page }) => {
   console.log('Test Start');
   await test.step(`User signs in`, async () => {
@@ -14,7 +14,13 @@ test.beforeEach(async ({ page }) => {
     await loginPage.navigateToLoginPage();
 
     await loginPage.assertThatUserIsOnLoginPage();
-    await loginPage.loginWithCredentials(testConfig.username, testConfig.password);
+    const username = process.env.USERNAME;
+    const password = process.env.PASSWORD;
+    if (username && password) {
+      await loginPage.loginWithCredentials(username, password);
+    } else {
+      throw new Error('Username or password not defined in environment variables.');
+    }
     await loginPage.wait15SecondsForUserToFinishCaptcha();
     await loginPage.assertThatUserIsOnOTPPage();
     await loginPage.userEntersOTPCode();

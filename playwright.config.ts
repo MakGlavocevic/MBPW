@@ -1,5 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
-import { testConfig } from '../MBPW/testConfig';
+
+const dotenv = require('dotenv');
+dotenv.config(); // Load environment variables from .env file
+
+const testConfig = {
+  qa_main: process.env.QA_MAIN
+};
 
 /**
  * Read environment variables from file.
