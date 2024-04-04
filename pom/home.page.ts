@@ -39,7 +39,7 @@ export class HomePage {
                
     }
 
-    async selectHedgingTradeAccount(): Promise<void> {
+    async selectEURHedgingTradeAccount(): Promise<void> {
 
         await expect(this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON, 'User opened trading account dropdown').toBeVisible();
         await this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON.click();

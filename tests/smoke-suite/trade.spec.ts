@@ -23,14 +23,14 @@ test.beforeEach(async ({ page, homePage, loginPage }) => {
   });
 });
 
-test('User successfully opens and closes a hedging BUY position',{ 
-  tag: ['@smoke', '@trade', '@buytrade'] }, 
+test('User successfully opens and closes a hedging BUY position with EUR trading account',{ 
+  tag: ['@smoke', '@trade', '@eurbuytrade'] }, 
   async ({ page, homePage, tradePage, utils }) => {
     
   test.setTimeout(1200000);
 
-    await test.step(`User selects hedging trading account`, async () => {
-      await homePage.selectHedgingTradeAccount();
+    await test.step(`User selects EUR hedging trading account`, async () => {
+      await homePage.selectEURHedgingTradeAccount();
     });
   
     await test.step(`User goes to trade screen`, async () => {
@@ -66,13 +66,13 @@ test('User successfully opens and closes a hedging BUY position',{
   });
 });
 
- test('User successfully opens and closes a hedging SELL position', { 
-  tag: ['@smoke', '@trade', '@selltrade'] }, 
+ test('User successfully opens and closes a hedging SELL position with EUR trading account', { 
+  tag: ['@smoke', '@trade', '@eurselltrade'] }, 
   async ({ page, homePage, tradePage, utils  }) => {
   test.setTimeout(1200000);
 
-  await test.step(`User selects hedging trading account`, async () => {
-    await homePage.selectHedgingTradeAccount();
+  await test.step(`User selects EUR hedging trading account`, async () => {
+    await homePage.selectEURHedgingTradeAccount();
   });
 
   await test.step(`User goes to trade screen`, async () => {
