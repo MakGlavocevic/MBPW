@@ -134,6 +134,7 @@ test('User asserts that Hedging trading account behaves as expected',{
   
           await tradePage.openMarketPosition('BUY', 'Value', '1');
           await tradePage.openMarketPosition('BUY', 'Value', '1');
+          await tradePage.assertMarginOfTwoPositions();
           await tradePage.assertHedgingPositionBehaviour();
           await tradePage.closeAllPositions();
       }
@@ -167,6 +168,7 @@ test('User asserts that Netting trading account behaves as expected',{
   
           await tradePage.openMarketPosition('BUY', 'Value', '1');
           await tradePage.openMarketPosition('BUY', 'Value', '1');
+          await tradePage.assertMarginOfTwoPositions();
           await tradePage.assertNettingPositionBehaviour();
           await tradePage.closeAllPositions();
       }

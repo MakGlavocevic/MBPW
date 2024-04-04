@@ -4,6 +4,7 @@ export class HomePage {
     readonly page: Page;
     readonly context: BrowserContext;
     readonly HEDGING_TRADING_ACCOUNT: Locator;
+    readonly NETTING_TRADING_ACCOUNT: Locator;
     readonly TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON: Locator;
     readonly INVALID_EMAIL_OR_PASSWORD_TEXT: string;
     readonly WALLET_BACKGROUND: Locator;
@@ -16,12 +17,12 @@ export class HomePage {
         this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON = page.locator('[alt="user-icon"]');
         this.INVALID_EMAIL_OR_PASSWORD_TEXT = 'Invalid email or password. Please try again.';
         this.HEDGING_TRADING_ACCOUNT = page.locator('//span[contains(text(),"650991")]');
+        this.NETTING_TRADING_ACCOUNT = page.locator('//span[contains(text(),"700042")]');
         this.WALLET_BACKGROUND = page.locator('[alt="wallet-background"]');
         this.LOG_OUT_BUTTON = page.locator('//button[contains(text(),"Log Out")]');
         this.SUPPORT_WINDOW_MINIMIZE = page.locator('[aria-label="Minimize window"]');
         this.SUPPORT_WINDOW = '[name="chat-widget"]';
     }
-
 
     async navigateToHomePage(): Promise<void> {
 
@@ -51,6 +52,21 @@ export class HomePage {
         await this.page.waitForTimeout(1000);
 
         await expect(this.HEDGING_TRADING_ACCOUNT, 'Hedging account is selected').toBeVisible();
+      
+    }
+
+    async selectNettingTradeAccount(): Promise<void> {
+
+        await expect(this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON, 'User opened trading account dropdown').toBeVisible();
+        await this.TRADING_ACCOUNT_DROPDOWN_AVATAR_ICON.click();
+
+        await expect(this.NETTING_TRADING_ACCOUNT, 'User sees Netting account').toBeVisible();
+        await this.NETTING_TRADING_ACCOUNT.click();
+        console.log('User selected Netting account');
+
+        await this.page.waitForTimeout(1000);
+
+        await expect(this.HEDGING_TRADING_ACCOUNT, 'Netting account is selected').toBeVisible();
       
     }
 

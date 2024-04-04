@@ -32,6 +32,7 @@ export class TradePage {
     balanceAfterClosedPosition: number;
     buyPriceWhenTradeWasOpened: number;
     sellPriceWhenTradeWasOpened: number;
+    marginOfTwoPosition: number;
     marginWhenOpenPosition: number;
     currentMargin: number;
     closedPriceWhenClosing: number;
@@ -69,6 +70,8 @@ export class TradePage {
     readonly POSITION_SIZE_DROPDOWN_VALUE: Locator;
     readonly POSITION_SIZE_DROPDOWN_LOT: Locator;
     readonly INITIAL_MARGIN: Locator;
+    readonly FIRST_POSITION: Locator;
+    readonly SECOND_POSITION: Locator;
     
     constructor(page: Page) {
         this.page = page;
@@ -124,7 +127,8 @@ export class TradePage {
         this.POSITION_SIZE_DROPDOWN_VALUE = page.locator('//html[1]/body[1]/div[2]/div[3]/div[1]/button[1]');
         this.POSITION_SIZE_DROPDOWN_LOT = page.locator('//html[1]/body[1]/div[2]/div[3]/div[1]/button[2]');
         this.INITIAL_MARGIN = page.locator('//html/body/div[1]/div/div/div/div[2]/div/div[5]/div/div[1]/div[2]/div[3]/div[2]/span[2]');
-       
+        this.FIRST_POSITION = page.locator('//body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[1]');
+        this.SECOND_POSITION = page.locator('//body[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[4]/div[2]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[2]/td[1]');
     }
 
     async navigateToTradePage(): Promise<void> {
@@ -342,8 +346,23 @@ export class TradePage {
         this.currentMargin = await this.marginAccountMetrics();
 
         try {
-            await expect.soft(this.marginWhenOpenPosition, 
+            await expect(this.marginWhenOpenPosition, 
                 'Margin of the open position is same as account metrics margin')
+                .toBe(this.currentMargin);
+        } catch (error) {
+            throw new Error('Margin is not the equal value in position table and account metrics');
+        }
+     }
+
+     async assertMarginOfTwoPositions(): Promise<void> {
+
+        this.marginWhenOpenPosition = await this.currentTableMargin();
+        this.currentMargin = await this.marginAccountMetrics();
+        this.marginOfTwoPosition = this.marginWhenOpenPosition + this.marginWhenOpenPosition;
+
+        try {
+            await expect(this.marginOfTwoPosition, 
+                'Margin of two open positions is same as account metrics margin')
                 .toBe(this.currentMargin);
         } catch (error) {
             throw new Error('Margin is not the equal value in position table and account metrics');
@@ -812,6 +831,21 @@ export class TradePage {
         await expect(this.ORDER_HISTORY_TAB).toBeVisible();
         await this.ORDER_HISTORY_TAB.click();
         await expect(this.CLOSED_PRICE_COLUMN_LABEL, 'User is on the order history tab').toBeVisible();
+
+     }
+
+     async assertHedgingPositionBehaviour(): Promise<void> {
+
+        await expect(this.FIRST_POSITION, 'First position is visible').toBeVisible();
+        await expect(this.SECOND_POSITION, 'Second position is visible').toBeVisible();
+
+     }
+
+     async assertNettingPositionBehaviour(): Promise<void> {
+
+        await expect(this.FIRST_POSITION, 'First position is visible').toBeVisible();
+        await expect(this.SECOND_POSITION, 'Only one position should be visible').not.toBeVisible();
+ 
 
      }
 }
