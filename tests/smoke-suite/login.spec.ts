@@ -20,10 +20,8 @@ test('User successfully signs in and logs out', { tag: ['@smoke', '@login', '@va
 
   await test.step(`User logs in using valid credentials`, async () => {
 
-    const username = process.env.USERNAME;
-    const password = process.env.PASSWORD;
-    if (username && password) {
-      await loginPage.loginWithCredentials(username, password);
+    if (process.env.USERNAME && process.env.PASSWORD) {
+      await loginPage.loginWithCredentials(process.env.USERNAME, process.env.PASSWORD);
     } else {
       throw new Error('Username or password not defined in environment variables.');
     }
@@ -74,10 +72,8 @@ test('User unsuccessfully signs in', { tag: ['@smoke', '@login', '@invalidlogin'
     });
   
     await test.step(`User logs in using valid credentials but invalid otp code`, async () => {
-    const username = process.env.USERNAME;
-    const password = process.env.PASSWORD;
-    if (username && password) {
-      await loginPage.loginWithCredentials(username, password);
+    if (process.env.USERNAME && process.env.PASSWORD) {
+      await loginPage.loginWithCredentials(process.env.USERNAME, process.env.PASSWORD);
     } else {
       throw new Error('Username or password not defined in environment variables.');
     }

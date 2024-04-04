@@ -16,10 +16,8 @@ test.beforeEach(async ({ page }) => {
     await loginPage.navigateToLoginPage();
     await loginPage.assertThatUserIsOnLoginPage();
 
-    const username = process.env.USERNAME;
-    const password = process.env.PASSWORD;
-    if (username && password) {
-      await loginPage.loginWithCredentials(username, password);
+    if (process.env.USERNAME && process.env.PASSWORD) {
+      await loginPage.loginWithCredentials(process.env.USERNAME, process.env.PASSWORD);
     } else {
       throw new Error('Username or password not defined in environment variables.');
     }
