@@ -1,8 +1,4 @@
 import { test, expect } from '../../pom/pom.fixtures';
-import { LoginPage } from '../../pom/login.page';
-import { HomePage } from '../../pom/home.page';
-import { TradePage } from '../../pom/trade.page';
-import { Utils } from '../../pom/utils';
 
 const { USERNAME, PASSWORD } = process.env
 

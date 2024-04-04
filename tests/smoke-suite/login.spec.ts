@@ -1,6 +1,4 @@
 import { test, expect } from '../../pom/pom.fixtures';
-import { LoginPage } from '../../pom/login.page';
-import { HomePage } from '../../pom/home.page';
 
 const { USERNAME, PASSWORD } = process.env
 
@@ -59,7 +57,7 @@ test('User unsuccessfully signs in', {
 
   test('User enters invalid OTP code', { 
     tag: ['@smoke', '@login', '@invalidOTPlogin'] }, 
-    async ({ page, homePage, loginPage }) => {
+    async ({ page, loginPage }) => {
   
     await test.step(`Navigate to the login screen`, async () => {
       await loginPage.navigateToLoginPage();
