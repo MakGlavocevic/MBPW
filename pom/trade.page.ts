@@ -134,27 +134,22 @@ export class TradePage {
         await this.page.waitForTimeout(500);
         await expect(this.TRADE_NAVIGATION_BUTTON).toBeVisible();
         await this.TRADE_NAVIGATION_BUTTON.click();
-        await this.page.waitForTimeout(500);
+      
         await this.page. reload()
         await this.page.waitForLoadState('domcontentloaded')
         await expect(this.page.url()).toContain(utils.EUR_USD_LINK);
-        await this.page.waitForTimeout(2000);
     }
 
     async closePosition(): Promise<void> {
-
-        await this.page.waitForTimeout(1000);
         this.closedPriceWhenClosing = await this.currentPriceTable();
         await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
         await this.POSITION_CLOSE_BUTTON.click();
-        await this.page.waitForTimeout(500);
 
         await expect(this.CLOSE_MODAL_SUBTITLE).toBeVisible();
         await expect(this.CLOSE_BUTTON).toBeVisible();
         await expect(this.CLOSED_PNL).toBeVisible();
         this.pnlValueWhenClosing = await this.closedPositionPNL();
         await this.CLOSE_BUTTON.click();
-        await this.page.waitForTimeout(500);
 
         await expect(this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE).toBeVisible();
         await expect(this.OK_BUTTON).toBeVisible();
@@ -166,21 +161,16 @@ export class TradePage {
 
     async closeAllPosition(): Promise<void> {
 
-        await this.page.waitForTimeout(1000);
-
         await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
         await this.POSITION_CLOSE_BUTTON.click();
-        await this.page.waitForTimeout(500);
 
         await expect(this.CLOSE_MODAL_SUBTITLE).toBeVisible();
         await expect(this.CLOSE_BUTTON).toBeVisible();
         await this.CLOSE_BUTTON.click();
-        await this.page.waitForTimeout(500);
 
         await expect(this.POSITION_CLOSED_SUCCESSFULLY_MODAL_TITLE).toBeVisible();
         await expect(this.OK_BUTTON).toBeVisible();
         await this.OK_BUTTON.click();
-        await this.page.waitForTimeout(500);
     
     }
 
@@ -191,7 +181,7 @@ export class TradePage {
         while(notificationButtonVisible){
     
             await this.closeAllPosition();
-
+            await this.page.waitForTimeout(500);
             notificationButtonVisible = await this.page.isVisible(this.tablePositionCloseButtonString);
 }
         await this.page.waitForTimeout(4000);
@@ -255,7 +245,6 @@ export class TradePage {
                 break;
         }
 
-        await this.page.waitForTimeout(1000);
         this.initialMargin = await this.currentInitialMargin();
         await this.assertInitialMarginCalculation(utils.LEVERAGE_500)
 

@@ -13,7 +13,7 @@ test.beforeEach(async ({ page, homePage, loginPage }) => {
     await loginPage.assertThatUserIsOnLoginPage();
 
     await loginPage.loginWithCredentials(USERNAME_AUTOMATION!, PASSWORD!);
-    await loginPage.wait15SecondsForUserToFinishCaptcha();
+    await loginPage.wait5SecondsForUserToFinishCaptcha();
     await loginPage.assertThatUserIsOnOTPPage();
     await loginPage.userEntersOTPCode();
   
