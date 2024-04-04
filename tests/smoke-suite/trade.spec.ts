@@ -1,6 +1,6 @@
 import { test, expect } from '../../pom/pom.fixtures';
 
-const { USERNAME, PASSWORD } = process.env
+const { USERNAME_AUTOMATION, PASSWORD } = process.env
 
 test.beforeEach(async ({ page, homePage, loginPage }) => {
   console.log('Test Start');
@@ -12,8 +12,7 @@ test.beforeEach(async ({ page, homePage, loginPage }) => {
     await loginPage.navigateToLoginPage();
     await loginPage.assertThatUserIsOnLoginPage();
 
-    await loginPage.loginWithCredentials(USERNAME!, PASSWORD!);
-  
+    await loginPage.loginWithCredentials(USERNAME_AUTOMATION!, PASSWORD!);
     await loginPage.wait15SecondsForUserToFinishCaptcha();
     await loginPage.assertThatUserIsOnOTPPage();
     await loginPage.userEntersOTPCode();

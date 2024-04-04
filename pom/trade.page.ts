@@ -297,7 +297,7 @@ export class TradePage {
 
         try {
             console.log('Balance after opened position: ' + balanceOpenPositionCalculation);
-            const isWithinRangeResult = await utils.isWithinRange(this.balanceBeforeOpenPosition, balanceOpenPositionCalculation, 1);
+            const isWithinRangeResult = await utils.isWithinRange('you have balance', this.balanceBeforeOpenPosition, balanceOpenPositionCalculation, 1);
             await expect(isWithinRangeResult,
                 'You have balance before opening position is in the expected range with the calculation = balanceafter + margin +/- pnl')
                 .toBeTruthy();
@@ -319,7 +319,7 @@ export class TradePage {
                 const entryBuyPrice = await this.entryPriceTable();
                 try {
                     console.log('Buy price when trade was opened: ' + this.buyPriceWhenTradeWasOpened);
-                    const isWithinRangeResult = await utils.isWithinRange(this.buyPriceWhenTradeWasOpened, entryBuyPrice, range);
+                    const isWithinRangeResult = await utils.isWithinRange('entry price', this.buyPriceWhenTradeWasOpened, entryBuyPrice, range);
                     await expect(isWithinRangeResult,
                     'Entry price is in the expected range with the Buy price when the trade was opened')
                     .toBeTruthy();
@@ -332,7 +332,7 @@ export class TradePage {
                 const entrySellPrice = await this.entryPriceTable();
                 try {
                     console.log('Sell price when trade was opened: ' + this.sellPriceWhenTradeWasOpened);
-                    const isWithinRangeResult = await utils.isWithinRange(this.sellPriceWhenTradeWasOpened, entrySellPrice, range);
+                    const isWithinRangeResult = await utils.isWithinRange('entry price', this.sellPriceWhenTradeWasOpened, entrySellPrice, range);
                     await expect(isWithinRangeResult, 
                         'Entry price is in the expected range with the Sell price when the trade was opened')
                         .toBeTruthy();
@@ -385,11 +385,11 @@ export class TradePage {
         this.currentMargin = await this.marginAccountMetrics();
 
         try {
-            const isWithinRangeResult = await utils.isWithinRange(this.marginWhenOpenPosition, this.initialMargin, range);
+            const isWithinRangeResult = await utils.isWithinRange('open table margin', this.marginWhenOpenPosition, this.initialMargin, range);
             await expect.soft(isWithinRangeResult, 
                 'Initial margin is in the expected range with the position opened margin')
                 .toBeTruthy();
-            const isWithinRangeResult2 = await utils.isWithinRange(this.currentMargin, this.initialMargin, range);
+            const isWithinRangeResult2 = await utils.isWithinRange('account metrics margin', this.currentMargin, this.initialMargin, range);
             await expect.soft(isWithinRangeResult2,
                 'Initial margin is in the expected range with the account metrics margin')
                 .toBeTruthy();
@@ -409,7 +409,7 @@ export class TradePage {
                 const currentTableBuyPrice = await this.currentPriceTable();
                 const currentNewSellPrice = await this.currentSellPrice();
                 try {
-                    const isWithinRangeResult = await utils.isWithinRange(currentTableBuyPrice, currentNewSellPrice, range);
+                    const isWithinRangeResult = await utils.isWithinRange('current price', currentTableBuyPrice, currentNewSellPrice, range);
                     await expect(isWithinRangeResult, 
                         'Sell price matches the expected range of the current price of buy side position in the table')
                         .toBeTruthy();
@@ -422,7 +422,7 @@ export class TradePage {
                 const currentTableSellPrice = await this.currentPriceTable();
                 const currentNewBuyPrice = await this.currentBuyPrice();
                 try {
-                    const isWithinRangeResult = await utils.isWithinRange(currentTableSellPrice, currentNewBuyPrice, range);
+                    const isWithinRangeResult = await utils.isWithinRange('current price', currentTableSellPrice, currentNewBuyPrice, range);
                     await expect(isWithinRangeResult,
                         'Buy price matches the expected range of the current price of sell side position in the table')
                         .toBeTruthy();
@@ -641,7 +641,7 @@ export class TradePage {
             balanceAfterClosePositionCalculation =  this.balanceBeforeOpenPosition + this.pnlValueWhenClosing;
         }
 
-        const isWithinRangeResult = await utils.isWithinRange(this.balanceAfterClosedPosition, balanceAfterClosePositionCalculation, range);
+        const isWithinRangeResult = await utils.isWithinRange('you have balance', this.balanceAfterClosedPosition, balanceAfterClosePositionCalculation, range);
         await expect(isWithinRangeResult).toBeTruthy();
        
      }
@@ -805,11 +805,11 @@ export class TradePage {
                 break;
         }
 
-        const isWithinRangeResultClosedPrice = await utils.isWithinRange(orderHistoryClosedPrice, this.closedPriceWhenClosing, rangePrice);
+        const isWithinRangeResultClosedPrice = await utils.isWithinRange('closed price', orderHistoryClosedPrice, this.closedPriceWhenClosing, rangePrice);
         await expect(isWithinRangeResultClosedPrice,
             'Order history Closed price and Position close modal Closed price are in the expected range')
             .toBeTruthy();
-        const isWithinRangeResultPNL = await utils.isWithinRange(orderHistoryPNL, this.pnlValueWhenClosing, rangePnL);
+        const isWithinRangeResultPNL = await utils.isWithinRange('PnL', orderHistoryPNL, this.pnlValueWhenClosing, rangePnL);
         await expect(isWithinRangeResultPNL,
             'Order history PNL and Position close modal PNL are in the expected range').toBeTruthy();
         await expect(orderHistoryMargin, 'Order history margin matches the open position margin').toBe(this.marginWhenOpenPosition);

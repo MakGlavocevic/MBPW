@@ -1,6 +1,6 @@
 import { test, expect } from '../../pom/pom.fixtures';
 
-const { USERNAME, PASSWORD } = process.env
+const { USERNAME_AUTOMATION, PASSWORD } = process.env
 
 test.beforeEach(async ({ page, homePage }) => {
   console.log('Test Start');
@@ -18,7 +18,7 @@ test('User successfully signs in and logs out', {
 
   await test.step(`User logs in using valid credentials`, async () => {
 
-    await loginPage.loginWithCredentials(USERNAME!, PASSWORD!);
+    await loginPage.loginWithCredentials(USERNAME_AUTOMATION!, PASSWORD!);
 
     await loginPage.wait15SecondsForUserToFinishCaptcha();
     await loginPage.assertThatUserIsOnOTPPage();
@@ -66,7 +66,7 @@ test('User unsuccessfully signs in', {
   
     await test.step(`User logs in using valid credentials but invalid otp code`, async () => {
 
-      await loginPage.loginWithCredentials(USERNAME!, PASSWORD!);
+      await loginPage.loginWithCredentials(USERNAME_AUTOMATION!, PASSWORD!);
 
       await loginPage.wait15SecondsForUserToFinishCaptcha();
       await loginPage.assertThatUserIsOnOTPPage();
