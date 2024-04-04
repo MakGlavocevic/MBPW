@@ -1,27 +1,23 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../pom/pom.fixtures';
 import { LoginPage } from '../../pom/login.page';
 import { HomePage } from '../../pom/home.page';
 import { TradePage } from '../../pom/trade.page';
 import { Utils } from '../../pom/utils';
 
-test.beforeEach(async ({ page }) => {
-  
-  require('dotenv').config();
+const { USERNAME, PASSWORD } = process.env
+
+test.beforeEach(async ({ page, homePage, loginPage }) => {
   console.log('Test Start');
 
   await test.step(`User signs in`, async () => {
-    const homePage = new HomePage(page);
+  
     await homePage.navigateToHomePage();
-    const loginPage = new LoginPage(page);
+   
     await loginPage.navigateToLoginPage();
     await loginPage.assertThatUserIsOnLoginPage();
 
-    if (process.env.USERNAME && process.env.PASSWORD) {
-      await loginPage.loginWithCredentials(process.env.USERNAME, process.env.PASSWORD);
-    } else {
-      throw new Error('Username or password not defined in environment variables.');
-    }
-
+    await loginPage.loginWithCredentials(USERNAME!, PASSWORD!);
+  
     await loginPage.wait15SecondsForUserToFinishCaptcha();
     await loginPage.assertThatUserIsOnOTPPage();
     await loginPage.userEntersOTPCode();
@@ -31,23 +27,21 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke', '@trade', '@buytrade'] }, async ({ page }) => {
+test('User successfully opens and closes a hedging BUY position',{ 
+  tag: ['@smoke', '@trade', '@buytrade'] }, 
+  async ({ page, homePage, tradePage, utils }) => {
     
   test.setTimeout(1200000);
 
     await test.step(`User selects hedging trading account`, async () => {
-      const homePage = new HomePage(page);
       await homePage.selectHedgingTradeAccount();
     });
   
-      await test.step(`User goes to trade screen`, async () => {
-        const tradePage = new TradePage(page);
-        await tradePage.navigateToTradePage();
+    await test.step(`User goes to trade screen`, async () => {
+      await tradePage.navigateToTradePage();
     });
 
     await test.step(`User opens a EURUSD BUY position if the market is opened`, async () => {
-      const tradePage = new TradePage(page);
-      const utils = new Utils(page);
       const isTodayWeekend = await utils.isWeekend();
   
       // If today is a weekend, expect the market watch to be visible
@@ -76,22 +70,20 @@ test('User successfully opens and closes a hedging BUY position',{ tag: ['@smoke
   });
 });
 
- test('User successfully opens and closes a hedging SELL position', { tag: ['@smoke', '@trade', '@selltrade'] }, async ({ page }) => {
+ test('User successfully opens and closes a hedging SELL position', { 
+  tag: ['@smoke', '@trade', '@selltrade'] }, 
+  async ({ page, homePage, tradePage, utils  }) => {
   test.setTimeout(1200000);
 
   await test.step(`User selects hedging trading account`, async () => {
-    const homePage = new HomePage(page);
     await homePage.selectHedgingTradeAccount();
   });
 
-    await test.step(`User goes to trade screen`, async () => {
-      const tradePage = new TradePage(page);
-      await tradePage.navigateToTradePage();
+  await test.step(`User goes to trade screen`, async () => {
+    await tradePage.navigateToTradePage();
   });
 
   await test.step(`User opens a EURUSD SELL position if the market is opened`, async () => {
-    const tradePage = new TradePage(page);
-    const utils = new Utils(page);
     const isTodayWeekend = await utils.isWeekend();
 
     // If today is a weekend, expect the market watch to be visible
