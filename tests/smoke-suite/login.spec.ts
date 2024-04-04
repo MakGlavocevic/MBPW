@@ -20,9 +20,7 @@ test('User successfully signs in and logs out', {
 
   await test.step(`User logs in using valid credentials`, async () => {
 
-
     await loginPage.loginWithCredentials(USERNAME!, PASSWORD!);
-  
 
     await loginPage.wait15SecondsForUserToFinishCaptcha();
     await loginPage.assertThatUserIsOnOTPPage();
@@ -38,7 +36,6 @@ test('User successfully signs in and logs out', {
     await homePage.userLogOuts();
     await homePage.assertThatUserNotSignedIn();
    });
-
 });
 
 test('User unsuccessfully signs in', { 
@@ -58,7 +55,6 @@ test('User unsuccessfully signs in', {
    await test.step(`User asserts invalid credentials error`, async () => {
     await loginPage.assertInvalidCredentialsError();
    });
-
   });
 
   test('User enters invalid OTP code', { 
@@ -81,8 +77,5 @@ test('User unsuccessfully signs in', {
   
       await test.step(`User assert invalid otp code error`, async () => {
       await loginPage.assertInvalidErrorOTPCodeError();
-    
      });
-  
-  
     });
