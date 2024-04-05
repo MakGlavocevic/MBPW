@@ -22,7 +22,6 @@ export class HomePage {
         this.SUPPORT_WINDOW = '[name="chat-widget"]';
     }
 
-
     async navigateToHomePage(): Promise<void> {
 
         await this.page.goto("https://trade-main.mbfx-dev.com/"); //URL for FX dev 
@@ -36,7 +35,6 @@ export class HomePage {
         } else if (this.url.includes('trade-main')) {
             console.log('User is on a page containing "trade-main" in the URL');
         }
-               
     }
 
     async selectEURHedgingTradeAccount(): Promise<void> {

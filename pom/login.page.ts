@@ -213,9 +213,4 @@ export class LoginPage {
         await this.PASSWORD_EDITBOX.fill(newPassword);
         await this.LOGIN_SUBMIT_BUTTON.click();
     } 
-
-    // async LoginWithNewPassword(newPassword: string): Promise<void>{
-    //     await this.USERNAME_EDITBOX.fill('anel@automation.com')
-    //     await this.PASSWORD_EDITBOX.fill(newPassword);
-    // }
 }
