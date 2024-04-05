@@ -3,7 +3,7 @@ import { test, expect } from '../../pom/pom.fixtures';
 import { generateRandomPassword } from '../../pom/utils';
 
 
-const { USERNAME, PASSWORD } = process.env
+const { USERNAME_AUTOMATION, PASSWORD } = process.env
 
 test.beforeEach(async ({ page, homePage }) => {
   console.log('Test Start');
@@ -21,9 +21,9 @@ test('User successfully signs in and logs out', {
 
   await test.step(`User logs in using valid credentials`, async () => {
 
-    await loginPage.loginWithCredentials(USERNAME!, PASSWORD!);
+    await loginPage.loginWithCredentials(USERNAME_AUTOMATION!, PASSWORD!);
 
-    await loginPage.wait15SecondsForUserToFinishCaptcha();
+    await loginPage.wait5SecondsForUserToFinishCaptcha();
     await loginPage.assertThatUserIsOnOTPPage();
     await loginPage.userEntersOTPCode();
    });
@@ -50,7 +50,7 @@ test('User unsuccessfully signs in', {
 
   await test.step(`User logs in using invalid credentials`, async () => {
     await loginPage.loginWithInvalidCredentials();
-    await loginPage.wait15SecondsForUserToFinishCaptcha();
+    await loginPage.wait5SecondsForUserToFinishCaptcha();
    });
 
    await test.step(`User asserts invalid credentials error`, async () => {
@@ -69,9 +69,9 @@ test('User unsuccessfully signs in', {
   
     await test.step(`User logs in using valid credentials but invalid otp code`, async () => {
 
-      await loginPage.loginWithCredentials(USERNAME!, PASSWORD!);
+      await loginPage.loginWithCredentials(USERNAME_AUTOMATION!, PASSWORD!);
 
-      await loginPage.wait15SecondsForUserToFinishCaptcha();
+      await loginPage.wait5SecondsForUserToFinishCaptcha();
       await loginPage.assertThatUserIsOnOTPPage();
       await loginPage.userEntersOTPCode();
      });

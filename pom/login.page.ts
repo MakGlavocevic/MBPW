@@ -124,9 +124,9 @@ export class LoginPage {
         await expect(this.INVALID_EMAIL_OR_PASSWORD_ERROR).toHaveText(this.INVALID_EMAIL_OR_PASSWORD_TEXT);
     }
 
-    async wait15SecondsForUserToFinishCaptcha(): Promise<void> {
+    async wait5SecondsForUserToFinishCaptcha(): Promise<void> {
 
-        await this.page.waitForTimeout(15000);
+        await this.page.waitForTimeout(5000);
       
     }
 
