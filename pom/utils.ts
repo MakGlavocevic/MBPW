@@ -33,3 +33,25 @@ export class Utils {
         return positionValue / leverage;
     }
 } 
+export function generateRandomPassword(length: number): string { // This function is used for generating random password value
+    const lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
+    const uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbers = '0123456789';
+    const specialCharacters = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+    const allCharacters = lowercaseLetters + uppercaseLetters + numbers + specialCharacters;
+
+    let password = '';
+
+    const requiredChars = [lowercaseLetters, uppercaseLetters, numbers, specialCharacters];
+    for (const requiredChar of requiredChars) {
+        const randomIndex = Math.floor(Math.random() * requiredChar.length);
+        password += requiredChar[randomIndex];
+    }
+
+    for (let i = 4; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * allCharacters.length);
+        password += allCharacters[randomIndex];
+    }
+    return password;
+}

@@ -1,4 +1,7 @@
+import { log } from 'console';
 import { test, expect } from '../../pom/pom.fixtures';
+import { generateRandomPassword } from '../../pom/utils';
+
 
 const { USERNAME, PASSWORD } = process.env
 
@@ -77,3 +80,26 @@ test('User unsuccessfully signs in', {
       await loginPage.assertInvalidErrorOTPCodeError();
      });
     });
+
+    test('User is able to restart their password' , {
+      tag: ['@smoke', '@login', '@forgotpassword'] }, 
+      async ({ page, loginPage }) => {
+
+        await test.step(`Navigate to the login screen`, async () => {
+          await loginPage.navigateToLoginPage();
+          await loginPage.assertThatUserIsOnLoginPage();
+        });   
+        
+        await test.step('User has navigated to the forgot password screen' , async () => {
+
+          await loginPage.userNavigatesToForgotPassword();
+          await loginPage.userPopulatesForgotPassword();
+          await loginPage.userPopulateOTPCodeForForgotPassword();
+          await loginPage.userEntersNewPassword();
+        })
+
+        await test.step('User logins with new password' , async () => {
+          await loginPage.userEntersOTPCode();
+          await page.context().close();
+        })
+      });

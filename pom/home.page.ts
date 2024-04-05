@@ -25,7 +25,7 @@ export class HomePage {
 
     async navigateToHomePage(): Promise<void> {
 
-        await this.page.goto("");
+        await this.page.goto("https://trade-main.mbfx-dev.com/"); //URL for FX dev 
         await this.page.setViewportSize({
             width: 1920,
             height: 1080,
