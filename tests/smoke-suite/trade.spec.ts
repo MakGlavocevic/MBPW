@@ -132,8 +132,8 @@ test('User asserts that Hedging trading account behaves as expected',{
           console.log('Today is not a weekend. Skipping the visibility check.');
           await tradePage.closeAllPositions();
   
-          await tradePage.openMarketPosition('BUY', 'Value', '1');
-          await tradePage.openMarketPosition('BUY', 'Value', '1');
+          await tradePage.openMarketPositionBasic('BUY', 'Value', '1');
+          await tradePage.openMarketPositionBasic('BUY', 'Value', '1');
           await tradePage.assertMarginOfTwoPositions();
           await tradePage.assertHedgingPositionBehaviour();
           await tradePage.closeAllPositions();
@@ -166,8 +166,8 @@ test('User asserts that Netting trading account behaves as expected',{
           console.log('Today is not a weekend. Skipping the visibility check.');
           await tradePage.closeAllPositions();
   
-          await tradePage.openMarketPosition('BUY', 'Value', '1');
-          await tradePage.openMarketPosition('BUY', 'Value', '1');
+          await tradePage.openMarketPositionBasic('BUY', 'Value', '1');
+          await tradePage.openMarketPositionBasic('BUY', 'Value', '1');
           await tradePage.assertMarginOfTwoPositions();
           await tradePage.assertNettingPositionBehaviour();
           await tradePage.closeAllPositions();

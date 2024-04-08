@@ -135,10 +135,10 @@ export class TradePage {
         const utils = new Utils(this.page);
         await expect(this.TRADE_DROPDOWN_BUTTON).toBeVisible();
         await this.TRADE_DROPDOWN_BUTTON.click();
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(1000);
         await expect(this.TRADE_NAVIGATION_BUTTON).toBeVisible();
         await this.TRADE_NAVIGATION_BUTTON.click();
-      
+        await this.page.waitForTimeout(1000);
         await this.page. reload()
         await this.page.waitForLoadState('domcontentloaded')
         await expect(this.page.url()).toContain(utils.EUR_USD_LINK);
