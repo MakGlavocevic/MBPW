@@ -22,10 +22,9 @@ export class HomePage {
         this.SUPPORT_WINDOW = '[name="chat-widget"]';
     }
 
-
     async navigateToHomePage(): Promise<void> {
 
-        await this.page.goto("");
+        await this.page.goto(''); 
         await this.page.setViewportSize({
             width: 1920,
             height: 1080,
@@ -36,7 +35,6 @@ export class HomePage {
         } else if (this.url.includes('trade-main')) {
             console.log('User is on a page containing "trade-main" in the URL');
         }
-               
     }
 
     async selectEURHedgingTradeAccount(): Promise<void> {
