@@ -22,7 +22,8 @@ export class LoginPage {
     readonly INVALID_EMAIL_OR_PASSWORD_TEXT: string;
     readonly OTP_INVALID_ERROR: Locator;
     readonly FORGOT_PASSWORD_BUTTON: Locator;
-    readonly FORGOT_PASSWORD_TEXT: string;
+    readonly FORGOT_PASSWORD_TEXT_STRING: string;
+    readonly FORGOT_PASSWORD_TEXT_LOCATOR: Locator;
     readonly FORGOT_PASSWORD_INPUT_FIELD: Locator;
     readonly FORGOT_PASSWORD_CONTINUE_BUTTON: Locator;
     readonly FORGOT_PASSWORD_OTP_1: Locator;
@@ -35,9 +36,10 @@ export class LoginPage {
     readonly NEW_PASSWORD_FIELD: Locator;
     readonly NEW_PASSWORD_FIELD_CONFIRMATION: Locator;
     readonly RESET_PASSWORD_BUTTON: Locator;
-    readonly PASSWORD_SUCCESSFULLY_CHANGED: string;
+    readonly PASSWORD_SUCCESFULLY_CHANGED_LOCATOR: Locator;
+    readonly PASSWORD_SUCCESSFULLY_CHANGED_STRING: string;
     readonly FORGOT_PASSWORD_LOGIN_BUTTON: Locator;
-    newPassword: String; 
+    newPassword: string; 
 
 
     
@@ -61,7 +63,8 @@ export class LoginPage {
         this.INVALID_EMAIL_OR_PASSWORD_TEXT = 'Invalid email or password. Please try again.';
         this.OTP_INVALID_ERROR = page.locator('[class="style_message__PKH_2 style_error__fKZrk"]');
         this.FORGOT_PASSWORD_BUTTON = page.locator ('//html/body/div[1]/div/div/div/div/div[1]/form/a') 
-        this.FORGOT_PASSWORD_TEXT = 'Enter the email associated with your account and we’ll send an email with instructions to reset your password.';
+        this.FORGOT_PASSWORD_TEXT_STRING = 'Enter the email associated with your account and we’ll send an email with instructions to reset your password.';
+        this.FORGOT_PASSWORD_TEXT_LOCATOR = page.locator ('//html/body/div[1]/div/div/div/div/span');
         this.FORGOT_PASSWORD_INPUT_FIELD = page.locator('//html/body/div[1]/div/div/div/div/div/div[1]/div/input');
         this.FORGOT_PASSWORD_CONTINUE_BUTTON = page.locator ('//html/body/div[1]/div/div/div/div/div/div[2]/button[2]'); 
         this.FORGOT_PASSWORD_OTP_1 = page.locator ('//body/div[@id="__next"]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/input[1]');
@@ -74,7 +77,8 @@ export class LoginPage {
         this.NEW_PASSWORD_FIELD = page.locator('//html/body/div[1]/div/div/div/div/form/div[1]/div/input');
         this.NEW_PASSWORD_FIELD_CONFIRMATION = page.locator ('//html/body/div[1]/div/div/div/div/form/div[2]/div/input');
         this.RESET_PASSWORD_BUTTON = page.locator ('//button[contains(text(),"Reset Password")]');
-        this.PASSWORD_SUCCESSFULLY_CHANGED = 'You’ve successfully reset your password';
+        this.PASSWORD_SUCCESFULLY_CHANGED_LOCATOR = page.locator ('//html/body/div[7]/div/div/div/div/div[2]/div[1]/p')
+        this.PASSWORD_SUCCESSFULLY_CHANGED_STRING = 'You’ve successfully reset your password';
         this.FORGOT_PASSWORD_LOGIN_BUTTON = page.locator ('//button[contains(text(),"Login")]');
 
     }
@@ -180,13 +184,13 @@ export class LoginPage {
 
         await expect(this.FORGOT_PASSWORD_BUTTON, 'Forgot Password?').toBeVisible();
         await this.FORGOT_PASSWORD_BUTTON.click();
-        await expect(this.FORGOT_PASSWORD_TEXT).toContain(this.FORGOT_PASSWORD_TEXT);
+        await expect(this.FORGOT_PASSWORD_TEXT_LOCATOR).toHaveText(this.FORGOT_PASSWORD_TEXT_STRING);
     }
 
-    async userPopulatesForgotPassword(): Promise<void> {
+    async userPopulatesForgotPassword(email: string): Promise<void> {
 
         await expect(this.FORGOT_PASSWORD_INPUT_FIELD).toBeVisible();
-        await this.FORGOT_PASSWORD_INPUT_FIELD.fill('anel@automation.com') // Email that is used for forgot password flow
+        await this.FORGOT_PASSWORD_INPUT_FIELD.fill(email) // Email that is used for forgot password flow
         await this.FORGOT_PASSWORD_CONTINUE_BUTTON.click();
     }
 
@@ -201,14 +205,14 @@ export class LoginPage {
     }
 
     async userEntersNewPassword(): Promise<void> {
-        const newPassword = generateRandomPassword(12); // Change value for password how much letters/digits password will have 
-        await this.NEW_PASSWORD_FIELD.fill(newPassword); 
-        await this.NEW_PASSWORD_FIELD_CONFIRMATION.fill(newPassword);
+        this.newPassword = generateRandomPassword(12); // Change value for password how much letters/digits password will have 
+        await this.NEW_PASSWORD_FIELD.fill(this.newPassword); 
+        await this.NEW_PASSWORD_FIELD_CONFIRMATION.fill(this.newPassword);
         await this.RESET_PASSWORD_BUTTON.click();
-        await expect(this.PASSWORD_SUCCESSFULLY_CHANGED).toContain(this.PASSWORD_SUCCESSFULLY_CHANGED);
+        await expect(this.PASSWORD_SUCCESFULLY_CHANGED_LOCATOR, 'Successfull password change succesful').toHaveText(this.PASSWORD_SUCCESSFULLY_CHANGED_STRING);
         await this.FORGOT_PASSWORD_LOGIN_BUTTON.click();
         await this.USERNAME_EDITBOX.fill('anel@automation.com')
-        await this.PASSWORD_EDITBOX.fill(newPassword);
+        await this.PASSWORD_EDITBOX.fill(this.newPassword);
         await this.LOGIN_SUBMIT_BUTTON.click();
     } 
 }

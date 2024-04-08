@@ -1,6 +1,7 @@
 import { log } from 'console';
 import { test, expect } from '../../pom/pom.fixtures';
 import { generateRandomPassword } from '../../pom/utils';
+import { HomePage } from '../../pom/home.page';
 
 
 const { USERNAME, PASSWORD } = process.env
@@ -93,13 +94,13 @@ test('User unsuccessfully signs in', {
         await test.step('User has navigated to the forgot password screen' , async () => {
 
           await loginPage.userNavigatesToForgotPassword();
-          await loginPage.userPopulatesForgotPassword();
+          await loginPage.userPopulatesForgotPassword(); // this needs to be updated 
           await loginPage.userPopulateOTPCodeForForgotPassword();
           await loginPage.userEntersNewPassword();
         })
 
         await test.step('User logins with new password' , async () => {
           await loginPage.userEntersOTPCode();
-          await page.context().close();
+          await loginPage.userIsSignedIn();
         })
       });
