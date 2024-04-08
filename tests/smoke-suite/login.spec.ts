@@ -1,10 +1,6 @@
-import { log } from 'console';
 import { test, expect } from '../../pom/pom.fixtures';
-import { generateRandomPassword } from '../../pom/utils';
-import { HomePage } from '../../pom/home.page';
 
-
-const { USERNAME_AUTOMATION, PASSWORD } = process.env
+const { USERNAME_AUTOMATION, USERNAME_FORGOT_PASSWORD, PASSWORD } = process.env
 
 test.beforeEach(async ({ page, homePage }) => {
   console.log('Test Start');
@@ -94,7 +90,7 @@ test('User unsuccessfully signs in', {
         await test.step('User has navigated to the forgot password screen' , async () => {
 
           await loginPage.userNavigatesToForgotPassword();
-          await loginPage.userPopulatesForgotPassword(); // this needs to be updated 
+          await loginPage.userPopulatesForgotPassword(USERNAME_FORGOT_PASSWORD!);
           await loginPage.userPopulateOTPCodeForForgotPassword();
           await loginPage.userEntersNewPassword();
         })
