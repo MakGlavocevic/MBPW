@@ -148,7 +148,7 @@ export class LoginPage {
         await this.OTP_5.fill('5');
         await this.OTP_6.fill('6');
 
-        await expect(this.LOGIN_SUBMIT_BUTTON, 'User sees login button').toBeVisible();
+        await expect(this.LOGIN_SUBMIT_BUTTON, 'User entered OTP code').toBeVisible();
         await this.LOGIN_SUBMIT_BUTTON.click();
 
     }
@@ -191,28 +191,43 @@ export class LoginPage {
 
         await expect(this.FORGOT_PASSWORD_INPUT_FIELD).toBeVisible();
         await this.FORGOT_PASSWORD_INPUT_FIELD.fill(email) // Email that is used for forgot password flow
+        await expect(this.FORGOT_PASSWORD_CONTINUE_BUTTON).toBeVisible();
         await this.FORGOT_PASSWORD_CONTINUE_BUTTON.click();
     }
 
     async userPopulateOTPCodeForForgotPassword(): Promise<void> {
+
         await this.FORGOT_PASSWORD_OTP_1.fill('1');
         await this.FORGOT_PASSWORD_OTP_2.fill('2');
         await this.FORGOT_PASSWORD_OTP_3.fill('3');
         await this.FORGOT_PASSWORD_OTP_4.fill('4');
         await this.FORGOT_PASSWORD_OTP_5.fill('5');
         await this.FORGOT_PASSWORD_OTP_6.fill('6');
+
+        await expect(this.FORGOT_PASSWORD_CONTINUE_BUTTON, 'User populated OTP code').toBeVisible();
         await this.FORGOT_PASSWORD_CONTINUE.click()
+
     }
 
     async userEntersNewPassword(): Promise<void> {
+
         this.newPassword = generateRandomPassword(12); // Change value for password how much letters/digits password will have 
+        
+        await expect(this.NEW_PASSWORD_FIELD, 'User sees input filed for new password').toBeVisible();
         await this.NEW_PASSWORD_FIELD.fill(this.newPassword); 
         await this.NEW_PASSWORD_FIELD_CONFIRMATION.fill(this.newPassword);
+        await expect(this.RESET_PASSWORD_BUTTON).toBeVisible();
         await this.RESET_PASSWORD_BUTTON.click();
+
+        await expect(this.PASSWORD_SUCCESFULLY_CHANGED_LOCATOR, 'User sees successfully changed password modal').toBeVisible();
         await expect(this.PASSWORD_SUCCESFULLY_CHANGED_LOCATOR, 'Successfull password change succesful').toHaveText(this.PASSWORD_SUCCESSFULLY_CHANGED_STRING);
+
+        await expect(this.FORGOT_PASSWORD_LOGIN_BUTTON).toBeVisible();
         await this.FORGOT_PASSWORD_LOGIN_BUTTON.click();
         await this.USERNAME_EDITBOX.fill('anel@automation.com')
         await this.PASSWORD_EDITBOX.fill(this.newPassword);
+        await expect(this.LOGIN_SUBMIT_BUTTON, 'User submited new credentials').toBeVisible();
         await this.LOGIN_SUBMIT_BUTTON.click();
+
     } 
 }
