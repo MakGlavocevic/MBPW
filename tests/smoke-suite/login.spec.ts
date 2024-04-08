@@ -78,18 +78,17 @@ test('User unsuccessfully signs in', {
      });
     });
 
-    test('User is able to restart their password' , {
-      tag: ['@smoke', '@login', '@forgotpassword'] }, 
+    test('User is able to set a new password incase they forgot the old one' , {
+      tag: ['@regression', '@forgotpassword'] }, 
       async ({ page, loginPage }) => {
 
-        await test.step(`Navigate to the login screen`, async () => {
+        await test.step(`Navigate to the forgot password screen`, async () => {
           await loginPage.navigateToLoginPage();
           await loginPage.assertThatUserIsOnLoginPage();
+          await loginPage.userNavigatesToForgotPassword();
         });   
         
-        await test.step('User has navigated to the forgot password screen' , async () => {
-
-          await loginPage.userNavigatesToForgotPassword();
+        await test.step('User sets new password for his account' , async () => {
           await loginPage.userPopulatesForgotPassword(USERNAME_FORGOT_PASSWORD!);
           await loginPage.userPopulateOTPCodeForForgotPassword();
           await loginPage.userEntersNewPassword();
