@@ -26,5 +26,5 @@ This command will download the necessary browsers for your testing environment.
 In order to run these test locally you will need to create a .env file and add 2 secrets (USERNAME, PASSWORD), after that you can run the test using the following command
 
    ```
-   set QA_ENV=QA_MAIN=https://trade-main.mbfx-dev.com/ && npx playwright test --grep @tag --headed
+   set QA_ENV={url} && npx playwright test --grep @tag --headed
    ```

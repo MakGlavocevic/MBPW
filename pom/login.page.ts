@@ -1,6 +1,4 @@
 import { Page, BrowserContext, Locator, expect } from '@playwright/test';
-import { fill } from 'cypress/types/lodash';
-import { text } from 'stream/consumers';
 import { generateRandomPassword } from './utils';
 
 export class LoginPage {
