@@ -141,6 +141,7 @@ export class TradePage {
         await this.page.waitForTimeout(1000);
         await this.page. reload()
         await this.page.waitForLoadState('domcontentloaded')
+        await this.page.waitForTimeout(1000);
         await expect(this.page.url()).toContain(utils.EUR_USD_LINK);
     }
 
@@ -298,6 +299,87 @@ export class TradePage {
             throw new Error('Balance before/after open position calculation is incorrect');
         }
 
+        await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
+        await expect(this.POSITION_EDIT_BUTTON).toBeVisible();
+     
+    }
+
+    async openMarketPositionBasic(positionSide: string, positionSizeType: string, positionValue: string): Promise<void> {
+        const utils = new Utils(this.page);
+        this.positionSideType = positionSide;
+
+        switch (positionSide) {
+
+            case 'BUY':
+                await expect(this.BUY_SIDE_BUTTON).toBeVisible();
+                await this.BUY_SIDE_BUTTON.click();
+                await expect(this.SELL_INACTIVE_BUTTON).toBeVisible();
+                break;
+
+            case 'SELL':
+                await expect(this.SELL_SIDE_BUTTON).toBeVisible();
+                await this.SELL_SIDE_BUTTON.click();
+                await expect(this.BUY_INACTIVE_BUTTON).toBeVisible();
+                break;
+                
+            default:
+                console.log('Unknown side: ' + positionSide);
+                break;
+        }
+
+        await this.page.waitForTimeout(1000);
+
+        switch (positionSizeType) {
+
+            case 'Value':
+                await this.selectValuePosition();
+                await this.page.waitForTimeout(500);
+                await this.POSITION_VALUE_INPUT.fill(positionValue);
+                await this.page.waitForTimeout(500);
+                await this.MARGIN_ACCOUNT_METRICS.click();
+                await this.page.waitForTimeout(1000);
+                console.log('User used value for position size');
+                break;
+
+            case 'Lot':
+                await this.selectLotPosition();
+                await this.page.waitForTimeout(500);
+                await this.POSITION_LOT_INPUT.fill(positionValue);
+                await this.page.waitForTimeout(500);
+                await this.selectValuePosition();
+                await this.page.waitForTimeout(500);
+                await this.MARGIN_ACCOUNT_METRICS.click();
+                await this.page.waitForTimeout(1000);
+                console.log('User used lots for position size');
+                break;
+                
+            default:
+                console.log('Unknown positione type: ' + positionSizeType);
+                break;
+        }
+
+        switch (positionSide) {
+
+            case 'BUY':
+                await expect(this.BUY_LONG_BUTTON).toBeVisible();
+                await this.BUY_LONG_BUTTON.click();
+                await expect(this.BUY_POSITION_LABEL).toBeVisible();
+                console.log('User open position with BUY side and minimum value');
+                break;
+
+            case 'SELL':
+                await expect(this.SELL_SHORT_BUTTON).toBeVisible();
+                await this.SELL_SHORT_BUTTON.click();
+                await expect(this.SELL_POSITION_LABEL).toBeVisible();
+                console.log('User open position with SELL side and minimum value');
+                break;
+                
+            default:
+                console.log('Unknown side: ' + positionSide);
+                break;
+        }
+
+        await this.page.waitForTimeout(2000);
         await expect(this.POSITION_CLOSE_BUTTON).toBeVisible();
         await expect(this.POSITION_EDIT_BUTTON).toBeVisible();
      
