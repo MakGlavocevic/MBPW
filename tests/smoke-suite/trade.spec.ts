@@ -26,7 +26,7 @@ test('User successfully opens and closes a hedging BUY position with EUR trading
   tag: ['@smoke', '@trade', '@eurbuytrade'] }, 
   async ({ page, homePage, tradePage, utils }) => {
     
-  test.setTimeout(1200000);
+  test.setTimeout(60000);
 
     await test.step(`User selects EUR hedging trading account`, async () => {
       await homePage.selectEURHedgingTradeAccount();
@@ -68,7 +68,7 @@ test('User successfully opens and closes a hedging BUY position with EUR trading
  test('User successfully opens and closes a hedging SELL position with EUR trading account', { 
   tag: ['@smoke', '@trade', '@eurselltrade'] }, 
   async ({ page, homePage, tradePage, utils  }) => {
-  test.setTimeout(1200000);
+  test.setTimeout(60000);
 
   await test.step(`User selects EUR hedging trading account`, async () => {
     await homePage.selectEURHedgingTradeAccount();
@@ -104,5 +104,73 @@ test('User successfully opens and closes a hedging BUY position with EUR trading
         await tradePage.navigateToOrderHistoryTab();
         await tradePage.assertOrderHistory('SELL', 0.0001, 0.1);
     }
+ });
 });
+
+test('User asserts that Hedging trading account behaves as expected',{ 
+  tag: ['@smoke', '@trade', '@hedgingcheck'] }, 
+  async ({ page, homePage, tradePage, utils }) => {
+    
+  test.setTimeout(60000);
+
+    await test.step(`User selects EUR hedging trading account`, async () => {
+      await homePage.selectEURHedgingTradeAccount();
+    });
+  
+    await test.step(`User goes to trade screen`, async () => {
+      await tradePage.navigateToTradePage();
+    });
+
+    await test.step(`User opens two EURUSD BUY position if the market is opened`, async () => {
+      const isTodayWeekend = await utils.isWeekend();
+  
+      // If today is a weekend, expect the market watch to be visible
+      if (isTodayWeekend) {
+          await expect(tradePage.MARKET_WATCH_TIMER).toBeVisible();
+          console.log('Today is weekend. Market is closed.');
+      } else {
+          console.log('Today is not a weekend. Skipping the visibility check.');
+          await tradePage.closeAllPositions();
+  
+          await tradePage.openMarketPositionBasic('BUY', 'Value', '1');
+          await tradePage.openMarketPositionBasic('BUY', 'Value', '1');
+          await tradePage.assertMarginOfTwoPositions();
+          await tradePage.assertHedgingPositionBehaviour();
+          await tradePage.closeAllPositions();
+      }
+  });
+});
+
+test('User asserts that Netting trading account behaves as expected',{ 
+  tag: ['@smoke', '@trade', '@nettingcheck'] }, 
+  async ({ page, homePage, tradePage, utils }) => {
+    
+  test.setTimeout(60000);
+
+    await test.step(`User selects EUR hedging trading account`, async () => {
+      await homePage.selectNettingTradeAccount();
+    });
+  
+    await test.step(`User goes to trade screen`, async () => {
+      await tradePage.navigateToTradePage();
+    });
+
+    await test.step(`User opens a EURUSD BUY position if the market is opened`, async () => {
+      const isTodayWeekend = await utils.isWeekend();
+  
+      // If today is a weekend, expect the market watch to be visible
+      if (isTodayWeekend) {
+          await expect(tradePage.MARKET_WATCH_TIMER).toBeVisible();
+          console.log('Today is weekend. Market is closed.');
+      } else {
+          console.log('Today is not a weekend. Skipping the visibility check.');
+          await tradePage.closeAllPositions();
+  
+          await tradePage.openMarketPositionBasic('BUY', 'Value', '1');
+          await tradePage.openMarketPositionBasic('BUY', 'Value', '1');
+          await tradePage.assertMarginOfTwoPositions();
+          await tradePage.assertNettingPositionBehaviour();
+          await tradePage.closeAllPositions();
+      }
+  });
 });
